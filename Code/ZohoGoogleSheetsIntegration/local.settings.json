@@ -1,0 +1,16 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+		"ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+
+		"ZohoRefreshToken": "1000.53379e5113b42493099a326e6a0cddc9.99b05e07e74a28c86d08337febd12665",
+		"ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+		"ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+
+		"ZohoAnalyticsGetReports": "https://analyticsapi.zoho.com/api/jeff@netlinkmarketing.com/fpventures_projects/Ringba Conversion Report?ZOHO_ACTION=EXPORT&ZOHO_OUTPUT_FORMAT=JSON&ZOHO_API_VERSION=1.0&ZOHO_ERROR_FORMAT=JSON&ZOHO_CRITERIA=\"Call Start Time\" >= {0}"
+
+	}
+}
