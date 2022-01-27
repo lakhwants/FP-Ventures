@@ -9,3 +9,10 @@ Code/PestRoutesTest/obj/
 Code/UpdateDispositions/obj/
 Code/ZohoGoogleSheetsIntegration/bin/
 Code/ZohoGoogleSheetsIntegration/obj/
+Code/.vs/
+Code/FPVenturesPestRouteDispositions/.gitignore
+Code/HeyFlow/bin/
+Code/HeyFlow/obj/
+Code/HeyFlowIntegration/bin/
+Code/HeyFlowIntegration/obj/
+Code/HeyFlowTest/
