@@ -4,6 +4,6 @@ namespace FPVenturesZohoGoogleSheetsIntegration.Services.Interfaces
 {
 	public interface IZohoAnalyticsService
 	{
-		public ConversionReportsModel GetReports(string dateTime);
+		public ConversionReportsModel GetReports(string dateTime,string reportName);
 	}
 }
