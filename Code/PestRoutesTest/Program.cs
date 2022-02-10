@@ -8,7 +8,7 @@ namespace PestRoutesTest
 		static void Main(string[] args)
 		{
 			PestRouteService pestRouteService = new PestRouteService();
-			pestRouteService.GetPestRouteCustomerIDsAsync();
+		//	pestRouteService.GetPestRouteCustomerIDsAsync();
 		}
 	}
 }
