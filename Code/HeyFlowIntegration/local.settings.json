@@ -1,0 +1,21 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+		"ZohoLeadsBaseUrl": "https://www.zohoapis.com/crm/v2/",
+		"ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+		"ZohoAddLeadsPath": "Leads",
+		"ZohoCheckDuplicateLeadsPath": "Leads/search?criteria=({0})",
+
+		"ZohoRefreshToken": "1000.783dc14ce6e456c3eab0c53d486c0485.50ab0411d72f00488bd0a83323657031",
+		"ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+		"ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+
+		//"HawxZohoRefreshToken": "1000.ea83f8d83c672e0d544b8ba38cc8459f.3e55361c89133b1dae564012605f971a",
+		//"HawxZohoClientId": "1000.YKY9UZNGMARZWUA2YNRWCYHEIWXX6Y",
+		//"HawxZohoClientSecret": "4af39be9663c6f0b79195bc890693949957e30b5db"
+
+	}
+}

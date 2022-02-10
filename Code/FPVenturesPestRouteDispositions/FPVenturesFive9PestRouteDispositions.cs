@@ -1,37 +1,37 @@
-using FPVenturesFive9UnbounceDisposition.Models;
-using FPVenturesFive9UnbounceDisposition.Services.Interfaces;
-using FPVenturesFive9UnbounceDisposition.Services.Mapper;
+using FPVenturesFive9PestRouteDispositions.Models;
+using FPVenturesFive9PestRouteDispositions.Services.Interfaces;
+using FPVenturesFive9PestRouteDispositions.Services.Mapper;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FPVenturesFive9UnbounceDisposition
+namespace FPVenturesFive9PestRouteDispositions
 {
-	public class FPVenturesFive9UnbounceDisposition
+	public class FPVenturesFive9PestRouteDispositions
 	{
 		public readonly IZohoService _zohoService;
 		public readonly IFive9Service _five9Service;
-		const string AzureFunctionName = "FPVenturesFive9Dispositions";
+		const string AzureFunctionName = "FPVenturesFive9PestRouteDispositions";
 
-		public FPVenturesFive9UnbounceDisposition(IZohoService zohoService, IFive9Service five9Service)
+		public FPVenturesFive9PestRouteDispositions(IZohoService zohoService, IFive9Service five9Service)
 		{
 			_zohoService = zohoService;
 			_five9Service = five9Service;
 		}
 
-		[Function("Function1")]
-        public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo timerInfo, ILogger log, FunctionContext context)
-        {
+		[Function(AzureFunctionName)]
+		public void RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
+		{
 
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Timer - {timerInfo.ScheduleStatus.Next}");
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
-			DateTime endDate = new DateTime(2021, 10, 8);
-			DateTime startDate = endDate.AddDays(0);
+			DateTime endDate = DateTime.Now;
+			DateTime startDate = endDate.AddHours(-1);
 
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);
@@ -53,13 +53,7 @@ namespace FPVenturesFive9UnbounceDisposition
 
 			var newDispositionsRecords = five9Records.Where(x => !duplicateDispositionRecords.Any(y => y.CallID == x.CallID)).ToList();
 
-			var zohoLeadsRecords = _zohoService.GetZohoLeads(newDispositionsRecords);
-			if (zohoLeadsRecords == null)
-				return;
-
-			logger.LogInformation($"Zoho leads records = {zohoLeadsRecords.Count}");
-			logger.LogInformation($"ZOHO leads with duplicate Phone Number = {zohoLeadsRecords.Where(x => x.IsDuplicate).Count()}");
-			var dispositionRecordModels = ModelMapper.MapFive9ModelCallDispositionModel(zohoLeadsRecords, newDispositionsRecords);
+			var dispositionRecordModels = ModelMapper.MapFive9ModelCallDispositionModel(newDispositionsRecords);
 			logger.LogInformation($"Disposition records to add = {dispositionRecordModels.Data.Count}");
 
 
@@ -69,7 +63,9 @@ namespace FPVenturesFive9UnbounceDisposition
 
 			LogErrorModels(logger, errorModels);
 			logger.LogInformation($"Finished.....");
+
 		}
+
 		private static void LogErrorModels(ILogger logger, List<ZohoCallDispositionErrorModel> errorModels)
 		{
 			foreach (var errorModel in errorModels)
@@ -107,7 +103,5 @@ namespace FPVenturesFive9UnbounceDisposition
 						$"{nameof(errorModel.Skill)} = {errorModel.Skill}");
 			}
 		}
-
-
 	}
 }
