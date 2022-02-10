@@ -1,0 +1,22 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "Schedule": "0 */1 * * * *",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+    "ZohoLeadsBaseUrl": "https://www.zohoapis.com/crm/v2/",
+    "ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+    "ZohoCOQLPath": "coql",
+
+    "ZohoInventoryBaseUrl": "https://inventory.zoho.com/api/v1/",
+    "ZohoInventoryAddItemPath": "items",
+
+    "ZohoRefreshToken": "1000.3022959d47d1a763b20418547dfc858d.0477c63799d714855b82eca55a0c9550",
+    "ZohoInventoryRefreshToken": "1000.a61d7310ce4d29554916cba0656c16f4.44b4a6015c910cd888d1b7656395d02f",
+    "ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+    "ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+
+    "COQLQuery": "select Last_Name, First_Name, Company, Email, Phone, Caller_ID, Campaign_Name, Publisher_Name, Inbound_Call_ID, Duration, Payout,  IsHeyFlowLead, State, IsContactFormLead, Leads_Date_Time, IsUnbounceRecord, Call_Date_Time, Tagged_State from Leads where Leads_Date_Time > '{0}' OR Call_Date_Time > '{0}' Order by Leads_Date_Time,Call_Date_Time DESC"
+  }
+}

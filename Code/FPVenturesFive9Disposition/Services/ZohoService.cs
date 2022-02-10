@@ -17,7 +17,6 @@ namespace FPVenturesFive9UnbounceDisposition.Services
 		{
 			_five9ZohoConfigurationSettings = five9ZohoConfigurationSettings;
 		}
-		//public string SearchCriteria = "(Caller_ID:equals:{0})";
 
 		/// <summary>
 		/// Check for duplicate leads in ZOHO using the inbound ID
@@ -71,7 +70,7 @@ namespace FPVenturesFive9UnbounceDisposition.Services
 		/// Check for duplicate Disposition records in ZOHO using the inbound ID
 		/// </summary>
 		/// <param name="ringbaRecords"></param>
-		/// <returns></returns>
+		/// <returns></returns>	
 		public List<CallDispositionRecordModel> DuplicateZohoDispositions(List<Five9Model> five9Models)
 		{
 			string SearchCriteria = "(Call_ID:equals:{0})";
