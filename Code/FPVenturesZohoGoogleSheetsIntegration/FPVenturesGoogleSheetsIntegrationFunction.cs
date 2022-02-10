@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Net;
 using ZohoGoogleSheetsIntegration.Helper;
 
@@ -21,6 +22,11 @@ namespace FPVenturesZohoGoogleSheetsIntegration
         public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
           FunctionContext executionContext)
         {
+
+            // convert stream to string
+            StreamReader reader = new StreamReader(req.Body);
+            string text = reader.ReadToEnd();
+
             var logger = executionContext.GetLogger(AzureFunctionName);
 
             logger.LogInformation($"{AzureFunctionName}");
