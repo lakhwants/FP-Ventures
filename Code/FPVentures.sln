@@ -23,10 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZohoGoogleIntegration", "Zo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TEst", "TEst\TEst.csproj", "{C6EF416A-C41F-4F6F-BD16-5DB94945E2EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesHawx", "E:\Official\Projects\FP Ventures\FPVenturesHawx\FPVenturesHawx.csproj", "{08066874-A787-4F5D-B024-64EDF1C96120}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesHAWXIntegration", "E:\Official\Projects\FP Ventures\FPVenturesHAWXIntegration\FPVenturesHAWXIntegration.csproj", "{121AC8EF-5844-44B0-952E-04C89A5C3063}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeyFlowIntegration", "HeyFlowIntegration\HeyFlowIntegration.csproj", "{F97A6EAF-0F1B-4A0C-A782-251F48B19BFF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeyFlowTest", "HeyFlowTest\HeyFlowTest.csproj", "{9148E088-93C4-455E-ADCA-25E33195DF00}"
@@ -81,14 +77,6 @@ Global
 		{C6EF416A-C41F-4F6F-BD16-5DB94945E2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6EF416A-C41F-4F6F-BD16-5DB94945E2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6EF416A-C41F-4F6F-BD16-5DB94945E2EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08066874-A787-4F5D-B024-64EDF1C96120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08066874-A787-4F5D-B024-64EDF1C96120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08066874-A787-4F5D-B024-64EDF1C96120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08066874-A787-4F5D-B024-64EDF1C96120}.Release|Any CPU.Build.0 = Release|Any CPU
-		{121AC8EF-5844-44B0-952E-04C89A5C3063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{121AC8EF-5844-44B0-952E-04C89A5C3063}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{121AC8EF-5844-44B0-952E-04C89A5C3063}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{121AC8EF-5844-44B0-952E-04C89A5C3063}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F97A6EAF-0F1B-4A0C-A782-251F48B19BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F97A6EAF-0F1B-4A0C-A782-251F48B19BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F97A6EAF-0F1B-4A0C-A782-251F48B19BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
