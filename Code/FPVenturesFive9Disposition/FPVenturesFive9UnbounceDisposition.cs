@@ -21,7 +21,7 @@ namespace FPVenturesFive9UnbounceDisposition
 			_five9Service = five9Service;
 		}
 
-		[Function("Function1")]
+		[Function(AzureFunctionName)]
         public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo timerInfo, ILogger log, FunctionContext context)
         {
 

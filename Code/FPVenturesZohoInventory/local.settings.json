@@ -17,6 +17,6 @@
     "ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
     "ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
 
-    "COQLQuery": "select Last_Name, First_Name, Company, Email, Phone, Caller_ID, Campaign_Name, Publisher_Name, Inbound_Call_ID, Duration, Payout,  IsHeyFlowLead, State, IsContactFormLead, Leads_Date_Time, IsUnbounceRecord, Call_Date_Time, Tagged_State from Leads where Leads_Date_Time > '{0}' OR Call_Date_Time > '{0}' Order by Leads_Date_Time,Call_Date_Time DESC"
+    "COQLQuery": "select id, Last_Name, First_Name, Company, Email, Phone, Caller_ID, Campaign_Name, Publisher_Name, Inbound_Call_ID, Duration, Payout,  IsHeyFlowLead, State, IsContactFormLead, Leads_Date_Time, IsUnbounceRecord, Call_Date_Time, Tagged_State, Unbounce_Page_Name from Leads where Leads_Date_Time > '{0}' OR Call_Date_Time > '{0}' Order by Leads_Date_Time,Call_Date_Time DESC"
   }
 }

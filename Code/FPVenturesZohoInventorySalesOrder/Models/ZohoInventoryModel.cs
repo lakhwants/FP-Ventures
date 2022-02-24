@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventory.Models
+namespace FPVenturesZohoInventorySalesOrder.Models
 {
 	public class CustomField
 	{
@@ -15,9 +15,6 @@ namespace FPVenturesZohoInventory.Models
 
 	public class ZohoInventoryModel
 	{
-		[JsonProperty("rate")]
-		public decimal Rate { get; set; }
-
 		[JsonProperty("sku")]
 		public long SKU { get; set; }
 

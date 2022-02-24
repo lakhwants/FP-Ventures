@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FPVenturesZohoInventory.Models
+namespace FPVenturesZohoInventorySalesOrder.Models
 {
 	public class ZohoLeadsModel
 	{

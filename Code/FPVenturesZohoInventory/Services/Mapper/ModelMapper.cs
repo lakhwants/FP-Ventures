@@ -15,91 +15,87 @@ namespace FPVenturesZohoInventory.Services.Mapper
 				ZohoInventoryModel zohoInventoryModel = new ZohoInventoryModel();
 				List<CustomField> customFields = new()
 				{
-					new CustomField { label = ZohoInventoryCustomFields.FirstName, value = zohoLead.FirstName },
-					new CustomField { label = ZohoInventoryCustomFields.Vendor, value = zohoLead.PublisherName },
-					new CustomField { label = ZohoInventoryCustomFields.LastName, value = zohoLead.LastName },
-					new CustomField { label = ZohoInventoryCustomFields.Email, value = zohoLead.Email },
-					new CustomField { label = ZohoInventoryCustomFields.CampaignName, value = zohoLead.CampaignName },
-					new CustomField { label = ZohoInventoryCustomFields.PublisherName, value = zohoLead.PublisherName },
-					new CustomField { label = ZohoInventoryCustomFields.InboundCallID, value = zohoLead.InboundCallID },
-					new CustomField { label = ZohoInventoryCustomFields.Duration, value = zohoLead.Duration },
-					new CustomField { label = ZohoInventoryCustomFields.TaggedState, value = zohoLead.TaggedCity },
-					new CustomField { label = ZohoInventoryCustomFields.CallDateTime, value = zohoLead.CallDateTime },
-					new CustomField { label = ZohoInventoryCustomFields.LeadsDateTime, value = zohoLead.LeadsDateTime }
+					new CustomField { Label = ZohoInventoryCustomFields.FirstName, Value = zohoLead.FirstName },
+					new CustomField { Label = ZohoInventoryCustomFields.Vendor, Value = zohoLead.PublisherName },
+					new CustomField { Label = ZohoInventoryCustomFields.LastName, Value = zohoLead.LastName },
+					new CustomField { Label = ZohoInventoryCustomFields.Email, Value = zohoLead.Email },
+					new CustomField { Label = ZohoInventoryCustomFields.CampaignName, Value = zohoLead.CampaignName },
+					new CustomField { Label = ZohoInventoryCustomFields.PublisherName, Value = zohoLead.PublisherName },
+					new CustomField { Label = ZohoInventoryCustomFields.InboundCallID, Value = zohoLead.InboundCallID },
+					new CustomField { Label = ZohoInventoryCustomFields.Duration, Value = zohoLead.Duration },
+					new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = zohoLead.TaggedCity },
+					new CustomField { Label = ZohoInventoryCustomFields.CallDateTime, Value = zohoLead.CallDateTime },
+					new CustomField { Label = ZohoInventoryCustomFields.LeadsDateTime, Value = zohoLead.LeadsDateTime }
 				};
 				if (zohoLead.IsUnbounceRecord)
 				{
-					zohoInventoryModel.name = zohoLead.Phone;
+					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
 					CustomField customField = new()
 					{
-						label = ZohoInventoryCustomFields.Phone,
-						value = zohoLead.Phone
+						Label = ZohoInventoryCustomFields.Phone,
+						Value = zohoLead.Phone
 					};
 
 					customFields.Add(customField);
-					customFields.Add(new CustomField { label = ZohoInventoryCustomFields.Payout, value = 30.ToString() });
-					zohoInventoryModel.description = "Unbounce Lead";
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = 30.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.UnbouncePageName, Value = zohoLead.UnbouncePageName });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsUnbounceLead, Value = true.ToString() });
+
+					zohoInventoryModel.Description = "Unbounce Lead";
+					zohoInventoryModel.Rate = 30;
 				}
 				else if (zohoLead.IsHeyFlowLead)
 				{
-					zohoInventoryModel.name = zohoLead.Phone;
+					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
 					CustomField customField = new()
 					{
-						label = ZohoInventoryCustomFields.Phone,
-						value = zohoLead.Phone
+						Label = ZohoInventoryCustomFields.Phone,
+						Value = zohoLead.Phone
 					};
-					customFields.Add(new CustomField { label = ZohoInventoryCustomFields.Payout, value = 30.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = 30.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsHeyFlowLead, Value = true.ToString() });
 					customFields.Add(customField);
-					zohoInventoryModel.description = "Heyflow Lead";
+					zohoInventoryModel.Description = "Heyflow Lead";
+					zohoInventoryModel.Rate = 30;
 				}
 				else if (zohoLead.IsContactFormLead)
 				{
-					zohoInventoryModel.name = zohoLead.Phone;
+					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
 					CustomField customField = new()
 					{
-						label = ZohoInventoryCustomFields.Phone,
-						value = zohoLead.Phone
+						Label = ZohoInventoryCustomFields.Phone,
+						Value = zohoLead.Phone
 					};
-					customFields.Add(new CustomField { label = ZohoInventoryCustomFields.Payout, value = 30.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = 30.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsContactFormLead, Value = true.ToString() });
 					customFields.Add(customField);
-					zohoInventoryModel.description = "Contact form Lead";
+					zohoInventoryModel.Description = "Contact form Lead";
+					zohoInventoryModel.Rate = 30;
 				}
 				else
 				{
-					zohoInventoryModel.name = zohoLead.CallerID;
+					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
 					CustomField customField = new()
 					{
-						label = ZohoInventoryCustomFields.CallerID,
-						value = zohoLead.Phone
+						Label = ZohoInventoryCustomFields.CallerID,
+						Value = zohoLead.Phone
 					};
-					customFields.Add(new CustomField { label = ZohoInventoryCustomFields.Payout, value = !string.IsNullOrEmpty(zohoLead.Payout)? zohoLead.Payout :0.ToString() });
-					zohoInventoryModel.description = "Ringba Lead";
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(zohoLead.Payout) ? zohoLead.Payout : 0.ToString() });
+					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Phone, Value = zohoLead.Phone });
+					zohoInventoryModel.Description = "Ringba Lead";
+					zohoInventoryModel.Rate = !string.IsNullOrEmpty(zohoLead.Payout) ? Convert.ToDecimal(zohoLead.Payout) : 0;
 				}
-				zohoInventoryModel.product_type = "service";
-				zohoInventoryModel.source = "user";
-				zohoInventoryModel.status = "active";
+				zohoInventoryModel.ProductType = "service";
+				zohoInventoryModel.Source = "user";
+				zohoInventoryModel.Status = "active";
+				zohoInventoryModel.SKU = zohoLead.LeadId;
 
-				zohoInventoryModel.custom_fields = customFields;
+				zohoInventoryModel.CustomFields = customFields;
 				zohoInventoryRecords.Add(zohoInventoryModel);
 			}
 
 			return zohoInventoryRecords;
 		}
-
-		//public static ZohoErrorModel MapHawxLeadToHawxZohoErrorModel(Record errorlist)
-		//{
-
-		//	ZohoErrorModel zohoErrorModel = new()
-		//	{
-		//		LastName = errorlist.LastName,
-		//		Company = errorlist.Company,
-		//		Phone = errorlist.Phone,
-		//		FirstName = errorlist.FirstName,
-		//		Email = errorlist.Email
-		//	};
-
-		//	return zohoErrorModel;
-		//}
 
 		public static string GetDateString(DateTime date)
 		{

@@ -21,7 +21,7 @@ namespace FPVenturesFive9Dispostion
 			_five9Service = five9Service;
 		}
 
-		[Function("FPVenturesFive9Dispositions")]
+		[Function(AzureFunctionName)]
 		public void RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
 

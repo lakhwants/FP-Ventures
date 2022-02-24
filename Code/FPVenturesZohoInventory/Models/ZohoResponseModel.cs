@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace FPVenturesZohoInventory.Models
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class CustomFieldResponseModel
+	public class CustomFieldResponseModel
     {
         public string customfield_id { get; set; }
         public bool show_in_store { get; set; }

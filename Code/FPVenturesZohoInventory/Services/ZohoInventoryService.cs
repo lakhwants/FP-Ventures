@@ -36,10 +36,7 @@ namespace FPVenturesZohoInventory.Services
 		{
 			List<ZohoInventoryResponseModel> zohoInventoryResponseModel = new();
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddItemPath)
-			{
-				Timeout = -1
-			};
+			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddItemPath);
 
 			foreach (var zohoInventoryModel in zohoInventoryModels)
 			{
@@ -52,17 +49,21 @@ namespace FPVenturesZohoInventory.Services
 				request.AddParameter("organization_id", "758026604");
 				var response = client.Execute<ZohoInventoryResponseModel>(request);
 
-				if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-				{
-					var requestRetry = new RestRequest(Method.POST);
-					requestRetry.AddHeader("Content-Type", "text/plain");
-					ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-					requestRetry.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-					requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
-					response = client.Execute<ZohoInventoryResponseModel>(request);
-				}
-				//CreateErrorSuccessModels(errorData, batch, response);
+				//if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+				//{
+				//	var requestRetry = new RestRequest(Method.POST);
+				//	requestRetry.AddHeader("Content-Type", "text/plain");
+				//	ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+				//	requestRetry.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+				//	requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
+				//	response = client.Execute<ZohoInventoryResponseModel>(request);
+				//}
 
+				if (response.Data.code == 43)
+				{
+					return null;
+				}
+			
 				zohoInventoryResponseModel.Add(response.Data);
 			}
 

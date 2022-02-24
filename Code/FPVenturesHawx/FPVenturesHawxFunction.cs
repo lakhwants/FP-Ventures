@@ -22,7 +22,7 @@ namespace FPVenturesHawx
 			_zohoLeadsService = zohoLeadsService;
 		}
 
-		[Function("FPVenturesHawxFunction")]
+		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
 			string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddHours(-3));

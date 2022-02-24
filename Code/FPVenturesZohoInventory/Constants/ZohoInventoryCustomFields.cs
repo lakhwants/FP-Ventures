@@ -4,24 +4,6 @@ namespace FPVenturesZohoInventory.Constants
 {
 	public static class ZohoInventoryCustomFields
 	{
-		//public static List<string> CustomFields = new()
-		//{
-		//	"Vendor",
-		//	"First Name",
-		//	"Last Name",
-		//	"Email",
-		//	"Phone",
-		//	"Caller ID",
-		//	"Campaign Name",
-		//	"Publisher Name",
-		//	"Inbound Call ID",
-		//	"Duration",
-		//	"Payout",
-		//	"Tagged State",
-		//	"Leads Date/Time",
-		//	"Call Date/Time"
-		//};
-
 		public static string FirstName = "First Name";
 		public static string Vendor = "Vendor";
 		public static string LastName = "Last Name";
@@ -36,7 +18,11 @@ namespace FPVenturesZohoInventory.Constants
 		public static string TaggedState = "Tagged State";
 		public static string LeadsDateTime = "Leads Date/Time";
 		public static string CallDateTime = "Call Date/Time";
-
+		public static string UnbouncePageName = "Unbounce Page Name";
+		public static string IsContactFormLead = "IsContactFormLead";
+		public static string IsHeyFlowLead = "	IsHeyFlowLead";
+		public static string IsUnbounceLead = "	IsUnbounceLead";
+		public static string LeadId = "LeadId";
 
 	}
 }

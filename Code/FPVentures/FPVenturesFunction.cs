@@ -22,7 +22,7 @@ namespace FPVentures
 			_zohoLeadsService = zohoLeadsService;
 		}
 
-		[Function("FPVenturesFunction")]
+		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
 			DateTime endDate = DateTime.Now;
