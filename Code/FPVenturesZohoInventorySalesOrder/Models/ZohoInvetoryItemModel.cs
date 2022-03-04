@@ -1,99 +1,178 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPVenturesZohoInventorySalesOrder.Models
 {
-    public class InventoryItem
+	public class InventoryItem
     {
-        public string item_id { get; set; }
-        public string name { get; set; }
-        public string item_name { get; set; }
-        public string unit { get; set; }
-        public string status { get; set; }
-        public string source { get; set; }
-        public bool is_combo_product { get; set; }
-        public bool is_linked_with_zohocrm { get; set; }
-        public string zcrm_product_id { get; set; }
-        public string description { get; set; }
-        public string brand { get; set; }
-        public string manufacturer { get; set; }
-        public double rate { get; set; }
-        public string tax_id { get; set; }
-        public string tax_name { get; set; }
-        public int tax_percentage { get; set; }
-        public string purchase_account_id { get; set; }
-        public string purchase_account_name { get; set; }
-        public string account_id { get; set; }
-        public string account_name { get; set; }
-        public string purchase_description { get; set; }
-        public double purchase_rate { get; set; }
-        public string item_type { get; set; }
-        public string product_type { get; set; }
-        public bool is_taxable { get; set; }
-        public string tax_exemption_id { get; set; }
+        [JsonProperty("item_id")]
+        public string ItemId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("item_name")]
+        public string ItemName { get; set; }
+
+        [JsonProperty("unit")]
+        public string Unit { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("source")]
+        public string Source { get; set; }
+
+        [JsonProperty("is_combo_product")]
+        public bool IsComboProduct { get; set; }
+
+        [JsonProperty("is_linked_with_zohocrm")]
+        public bool IsLinkedWithZohocrm { get; set; }
+
+        [JsonProperty("zcrm_product_id")]
+        public string ZcrmProductId { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("brand")]
+        public string Brand { get; set; }
+
+        [JsonProperty("manufacturer")]
+        public string Manufacturer { get; set; }
+
+        [JsonProperty("rate")]
+        public double Rate { get; set; }
+
+        [JsonProperty("tax_id")]
+        public string TaxId { get; set; }
+
+        [JsonProperty("tax_name")]
+        public string TaxName { get; set; }
+
+        [JsonProperty("tax_percentage")]
+        public int TaxPercentage { get; set; }
+
+        [JsonProperty("purchase_account_id")]
+        public string PurchaseAccountId { get; set; }
+
+        [JsonProperty("purchase_account_name")]
+        public string PurchaseAccountName { get; set; }
+
+        [JsonProperty("account_id")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("account_name")]
+        public string AccountName { get; set; }
+
+        [JsonProperty("purchase_description")]
+        public string PurchaseDescription { get; set; }
+
+        [JsonProperty("purchase_rate")]
+        public double PurchaseRate { get; set; }
+
+        [JsonProperty("item_type")]
+        public string ItemType { get; set; }
+
+        [JsonProperty("product_type")]
+        public string ProductType { get; set; }
+
+        [JsonProperty("is_taxable")]
+        public bool IsTaxable { get; set; }
+
+        [JsonProperty("tax_exemption_id")]
+        public string TaxExemptionId { get; set; }
+
+        [JsonProperty("tax_exemption_code")]
         public string tax_exemption_code { get; set; }
+
+        [JsonProperty("stock_on_hand")]
         public int stock_on_hand { get; set; }
+
+        [JsonProperty("has_attachment")]
         public bool has_attachment { get; set; }
+
+        [JsonProperty("is_returnable")]
         public bool is_returnable { get; set; }
+
+        [JsonProperty("available_stock")]
         public int available_stock { get; set; }
+
+        [JsonProperty("actual_available_stock")]
         public double actual_available_stock { get; set; }
-        public string sku { get; set; }
-        public string upc { get; set; }
-        public string ean { get; set; }
-        public string isbn { get; set; }
-        public string part_number { get; set; }
-        public string reorder_level { get; set; }
-        public string image_name { get; set; }
-        public string image_type { get; set; }
-        public string image_document_id { get; set; }
-        public DateTime created_time { get; set; }
-        public DateTime last_modified_time { get; set; }
-        public bool show_in_storefront { get; set; }
-        public string cf_vendor { get; set; }
-        public string cf_vendor_unformatted { get; set; }
-        public string cf_last_name { get; set; }
-        public string cf_last_name_unformatted { get; set; }
-        public string cf_phone { get; set; }
-        public string cf_phone_unformatted { get; set; }
-        public string cf_caller_id { get; set; }
-        public string cf_caller_id_unformatted { get; set; }
-        public string cf_campaign_name { get; set; }
-        public string cf_campaign_name_unformatted { get; set; }
-        public string cf_publisher_name { get; set; }
-        public string cf_publisher_name_unformatted { get; set; }
-        public string cf_duration { get; set; }
-        public string cf_duration_unformatted { get; set; }
-        public string cf_tagged_state { get; set; }
-        public string cf_tagged_state_unformatted { get; set; }
-        public DateTime cf_call_date_time { get; set; }
-        public DateTime cf_call_date_time_unformatted { get; set; }
-        public string cf_payout { get; set; }
-        public string cf_payout_unformatted { get; set; }
-        public string length { get; set; }
-        public string width { get; set; }
-        public string height { get; set; }
-        public string weight { get; set; }
-        public string weight_unit { get; set; }
-        public string dimension_unit { get; set; }
+
+        [JsonProperty("sku")]
+        public string SKU { get; set; }
+
+        [JsonProperty("upc")]
+        public string UPC { get; set; }
+
+        [JsonProperty("ean")]
+        public string EAN { get; set; }
+
+        [JsonProperty("isbn")]
+        public string IsBN { get; set; }
+
+        [JsonProperty("created_time")]
+        public DateTime CreatedTime { get; set; }
+
+        [JsonProperty("last_modified_time")]
+        public DateTime LastModifiedTime { get; set; }
+
+        [JsonProperty("show_in_storefront")]
+        public bool ShowInStorefront { get; set; }
+
+        [JsonProperty("cf_vendor")]
+        public string CfVendor { get; set; }
+
+        [JsonProperty("cf_last_name")]
+        public string CfLastName { get; set; }
+
+        [JsonProperty("cf_phone")]
+        public string CfPhone { get; set; }
+
+        [JsonProperty("cf_caller_id")]
+        public string CfCallerId { get; set; }
+
+        [JsonProperty("cf_campaign_name")]
+        public string CfCampaignName { get; set; }
+
+        [JsonProperty("cf_publisher_name")]
+        public string CfPublisherName { get; set; }
+
+        [JsonProperty("cf_duration")]
+        public string CfDuration { get; set; }
+
+        [JsonProperty("cf_tagged_state")]
+        public string CfTaggedState { get; set; }
+
+        [JsonProperty("cf_call_date_time")]
+        public DateTime CfCallDateTime { get; set; }
+
+        [JsonProperty("cf_payout")]
+        public string CfPayout { get; set; }
     }
 
     public class SearchCriteria
     {
-        public string column_name { get; set; }
-        public string search_text { get; set; }
-        public string search_text_formatted { get; set; }
-        public string comparator { get; set; }
+        [JsonProperty("cf_payout")]
+        public string ColumnName { get; set; }
+
+        [JsonProperty("cf_payout")]
+        public string CfPayout { get; set; }
+
+        [JsonProperty("search_text_formatted")]
+        public string SearchTextFormatted { get; set; }
+
+        [JsonProperty("comparator")]
+        public string Comparator { get; set; }
     }
 
     public class ZohoInventoryItemModel : PageContext
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public List<InventoryItem> items { get; set; }
-        public PageContext page_context { get; set; }
+        [JsonProperty("items")]
+        public List<InventoryItem> Items { get; set; }
     }
 
 

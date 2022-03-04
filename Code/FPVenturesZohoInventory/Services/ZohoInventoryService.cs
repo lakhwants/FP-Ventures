@@ -1,8 +1,10 @@
 ﻿using FPVenturesZohoInventory.Models;
 using FPVenturesZohoInventory.Services.Interfaces;
+using FPVenturesZohoInventory.Shared;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace FPVenturesZohoInventory.Services
 {
@@ -38,33 +40,29 @@ namespace FPVenturesZohoInventory.Services
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
 			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddItemPath);
 
-			foreach (var zohoInventoryModel in zohoInventoryModels)
+			var batches = Utility.BuildBatches<ZohoInventoryModel>(zohoInventoryModels, 90);
+			foreach (var batch in batches)
 			{
-				var request = new RestRequest(Method.POST);
-				request.AddHeader("Content-Type", "text/plain");
-				request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-
-				var body = JsonConvert.SerializeObject(zohoInventoryModel);
-				request.AddParameter("text/plain", body, ParameterType.RequestBody);
-				request.AddParameter("organization_id", "758026604");
-				var response = client.Execute<ZohoInventoryResponseModel>(request);
-
-				//if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-				//{
-				//	var requestRetry = new RestRequest(Method.POST);
-				//	requestRetry.AddHeader("Content-Type", "text/plain");
-				//	ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-				//	requestRetry.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-				//	requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
-				//	response = client.Execute<ZohoInventoryResponseModel>(request);
-				//}
-
-				if (response.Data.code == 43)
+				foreach (var zohoInventoryModel in batch)
 				{
-					return null;
+					var request = new RestRequest(Method.POST);
+					request.AddHeader("Content-Type", "text/plain");
+					request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+
+					var body = JsonConvert.SerializeObject(zohoInventoryModel);
+					request.AddParameter("text/plain", body, ParameterType.RequestBody);
+					request.AddParameter("organization_id", "758026604");
+					var response = client.Execute<ZohoInventoryResponseModel>(request);
+
+					if (response.Data.code == 43)
+					{
+						return null;
+					}
+
+					zohoInventoryResponseModel.Add(response.Data);
 				}
-			
-				zohoInventoryResponseModel.Add(response.Data);
+
+				Thread.Sleep(2 * 1000);
 			}
 
 			return zohoInventoryResponseModel;

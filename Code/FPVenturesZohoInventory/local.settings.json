@@ -1,7 +1,7 @@
 {
     "IsEncrypted": false,
   "Values": {
-    "Schedule": "0 */1 * * * *",
+    "ItemSchedule": "0 */1 * * * *",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
 

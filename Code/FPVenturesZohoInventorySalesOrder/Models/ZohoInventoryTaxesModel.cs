@@ -1,29 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FPVenturesZohoInventorySalesOrder.Models
 {
 	public class Tax
     {
-        public string tax_id { get; set; }
-        public string tax_name { get; set; }
-        public int tax_percentage { get; set; }
-        public string tax_type { get; set; }
-        public string tax_specific_type { get; set; }
-        public string tax_authority_id { get; set; }
-        public string tax_authority_name { get; set; }
-        public bool is_value_added { get; set; }
-        public bool is_default_tax { get; set; }
-        public bool is_editable { get; set; }
+        [JsonProperty("tax_id")]
+        public string TaxId { get; set; }
+
+        [JsonProperty("tax_name")]
+        public string TaxName { get; set; }
+
+        [JsonProperty("tax_percentage")]
+        public int TaxPercentage { get; set; }
+
+        [JsonProperty("tax_type")]
+        public string TaxType { get; set; }
+
+        [JsonProperty("tax_specific_type")]
+        public string TaxSpecificType { get; set; }
+
+        [JsonProperty("tax_authority_id")]
+        public string TaxAuthorityId { get; set; }
+
+        [JsonProperty("tax_authority_name")]
+        public string TaxAuthorityName { get; set; }
+
+        [JsonProperty("is_value_added")]
+        public bool IsValueAdded { get; set; }
+
+        [JsonProperty("is_default_tax")]
+        public bool IsDefaultTax { get; set; }
+
+        [JsonProperty("is_editable")]
+        public bool IsEditable { get; set; }
     }
-
-
 
     public class ZohoInventoryTaxesModel : PageContext
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public List<Tax> taxes { get; set; }
-        public PageContext page_context { get; set; }
+        [JsonProperty("taxes")]
+        public List<Tax> Taxes { get; set; }
     }
 
 }

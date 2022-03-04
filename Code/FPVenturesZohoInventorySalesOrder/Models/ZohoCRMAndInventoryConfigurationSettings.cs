@@ -4,8 +4,6 @@
 	{
 		public string ZohoLeadsBaseUrl { get; set; }
 		public string ZohoAccessTokenFromRefreshTokenPath { get; set; }
-		//public string ZohoAddLeadsPath { get; set; }
-		//public string ZohoCheckDuplicateLeadsPath { get; set; }
 		public string ZohoInventoryBaseUrl { get; set; }
 		public string ZohoInventoryAddItemPath { get; set; }
 		public string ZohoRefreshToken { get; set; }
@@ -15,8 +13,14 @@
 		public string COQLQuery { get; set; }
 		public string ZohoCOQLPath { get; set; }
 		public string ZohoInventoryAddSalesOrderPath { get; set; }
-		//public string SearchCriteria { get; set; }
-		//public string SearchOperator { get; set; }
+		public string ZohoInventoryInvoicePath { get; set; }		
+		public string ZohoInventoryTaxesPath { get; set; }
+		public string ZohoInventorySalesOrderConfirmPath { get; set; }
+		public string ZohoInventoryOrganizationId { get; set; }
+		public string ZohoInventorySearchParameter { get; set; }
+		public string ZohoInventoryContactsPath { get; set; }
+		public string ZohoInventoryContactPersonPath { get; set; }
+		public string ZohoInventoryCustomerName { get; set; }
 
 	}
 }

@@ -1,22 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FPVenturesZohoInventorySalesOrder.Models
 {
-	public class LineItem
+	public class LineItem : CustomField
 	{
-		public string item_id { get; set; }
-		public string sku { get; set; }
-		public string name { get; set; }
-		public string description { get; set; }
-		public int rate { get; set; }
-		public int quantity { get; set; } = 1; 
-		public string unit { get; set; } = "count";
-		public string tax_id { get; set; }
+		[JsonProperty("item_id")]
+		public string ItemId { get; set; }
+
+		[JsonProperty("sku")]
+		public string SKU { get; set; }
+
+		[JsonProperty("name")]
+		public string Name { get; set; }
+
+		[JsonProperty("description")]
+		public string Description { get; set; }
+
+		[JsonProperty("rate")]
+		public string Rate { get; set; }
+
+		[JsonProperty("quantity")]
+		public int Quantity { get; set; } = 1;
+
+		[JsonProperty("unit")]
+		public string Unit { get; set; } = "count";
+
+		[JsonProperty("tax_id")]
+		public string TaxId { get; set; }
 	}
 
 	public class ZohoInventorySalesOrderModel
 	{
-		public long customer_id { get; set; }
-		public List<LineItem> line_items+ { get; set; }
+		[JsonProperty("customer_id")]
+		public string CustomerId { get; set; }
+
+		[JsonProperty("line_items")]
+		public List<LineItem> LineItems { get; set; }
 	}
 }

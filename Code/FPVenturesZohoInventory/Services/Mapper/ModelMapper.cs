@@ -42,7 +42,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsUnbounceLead, Value = true.ToString() });
 
 					zohoInventoryModel.Description = "Unbounce Lead";
-					zohoInventoryModel.Rate = 30;
+					zohoInventoryModel.Rate = 30M;
 				}
 				else if (zohoLead.IsHeyFlowLead)
 				{
@@ -56,7 +56,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsHeyFlowLead, Value = true.ToString() });
 					customFields.Add(customField);
 					zohoInventoryModel.Description = "Heyflow Lead";
-					zohoInventoryModel.Rate = 30;
+					zohoInventoryModel.Rate = 30M;
 				}
 				else if (zohoLead.IsContactFormLead)
 				{
@@ -70,7 +70,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.IsContactFormLead, Value = true.ToString() });
 					customFields.Add(customField);
 					zohoInventoryModel.Description = "Contact form Lead";
-					zohoInventoryModel.Rate = 30;
+					zohoInventoryModel.Rate = 30M;
 				}
 				else
 				{
@@ -83,7 +83,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(zohoLead.Payout) ? zohoLead.Payout : 0.ToString() });
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Phone, Value = zohoLead.Phone });
 					zohoInventoryModel.Description = "Ringba Lead";
-					zohoInventoryModel.Rate = !string.IsNullOrEmpty(zohoLead.Payout) ? Convert.ToDecimal(zohoLead.Payout) : 0;
+					zohoInventoryModel.Rate = !string.IsNullOrEmpty(zohoLead.Payout) ? Convert.ToDecimal(zohoLead.Payout) : 0M;
 				}
 				zohoInventoryModel.ProductType = "service";
 				zohoInventoryModel.Source = "user";
