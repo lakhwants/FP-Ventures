@@ -25,7 +25,7 @@ namespace FPVenturesZohoInventory
 		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%ItemSchedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
-			string datetime = GetDateString(DateTime.Now.AddHours(-10));
+			string datetime = GetDateString(DateTime.Now.AddHours(-48));
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
@@ -73,8 +73,12 @@ namespace FPVenturesZohoInventory
 		{
 			foreach (var zohoInventoryResponseModel in zohoInventoryResponseModels)
 			{
-				logger.LogInformation($"{nameof(zohoInventoryResponseModel.message)} = {zohoInventoryResponseModel.message}, " +
-					$"{nameof(zohoInventoryResponseModel.item.sku)} = {zohoInventoryResponseModel.item.sku}, " +
+				logger.LogInformation($"{nameof(zohoInventoryResponseModel.message)} = {zohoInventoryResponseModel.message}");
+
+				if (zohoInventoryResponseModel.item == null)
+					continue;
+
+				logger.LogInformation($"{nameof(zohoInventoryResponseModel.item.sku)} = {zohoInventoryResponseModel.item.sku}, " +
 					$"{nameof(zohoInventoryResponseModel.item.name)} = {zohoInventoryResponseModel.item.sku}, " +
 					$"{nameof(zohoInventoryResponseModel.item.item_id)} = {zohoInventoryResponseModel.item.sku}, " +
 					$"{nameof(zohoInventoryResponseModel.item.sku)} = {zohoInventoryResponseModel.item.sku}, " +

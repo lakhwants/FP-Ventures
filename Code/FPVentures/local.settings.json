@@ -1,0 +1,26 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"Schedule": "0 */1 * * * *",
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+		"RingbaBaseUrl": "https://api.ringba.com/v2/",
+		"RingbaCallLogDetailsPath": "{0}/calllogs/detail",
+		"RingbaCallLogsPath": "{0}/calllogs",
+		"RingbaAccountsPath": "ringbaaccounts",
+
+		"ZohoLeadsBaseUrl": "https://www.zohoapis.com/crm/v2/",
+		"ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+		"ZohoAddLeadsPath": "Leads",
+		"ZohoCheckDuplicateLeadsPath": "Leads/search?criteria=({0})",
+		"SearchCriteria": "(Inbound_Call_ID:equals:{0})",
+		"SearchOperator": "or",
+
+		"ZohoRefreshToken": "1000.53379e5113b42493099a326e6a0cddc9.99b05e07e74a28c86d08337febd12665",
+		"ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+		"ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+
+		"RingbaAccessToken": "Token 09f0c9f097828403b4e7754091465d1f731a139aefb88dca610eb19a6e3cc549dd2b152ac7511752c31433dcc522e06a6e1a1df507a4a54e61eedbb8ae803fc582edfd72601bacc0a3e5f96fcee4d828f35bfc075100b61155b9619827709b61a5aa68fd48a80f8d79a4040643a48b7954609059"
+
+	}
+}	

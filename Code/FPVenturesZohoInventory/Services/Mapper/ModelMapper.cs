@@ -22,6 +22,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 					new CustomField { Label = ZohoInventoryCustomFields.CampaignName, Value = zohoLead.CampaignName },
 					new CustomField { Label = ZohoInventoryCustomFields.PublisherName, Value = zohoLead.PublisherName },
 					new CustomField { Label = ZohoInventoryCustomFields.InboundCallID, Value = zohoLead.InboundCallID },
+					new CustomField { Label = ZohoInventoryCustomFields.CallerID, Value = zohoLead.CallerID},
 					new CustomField { Label = ZohoInventoryCustomFields.Duration, Value = zohoLead.Duration },
 					new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = zohoLead.TaggedCity },
 					new CustomField { Label = ZohoInventoryCustomFields.CallDateTime, Value = zohoLead.CallDateTime },
@@ -75,11 +76,11 @@ namespace FPVenturesZohoInventory.Services.Mapper
 				else
 				{
 					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
-					CustomField customField = new()
-					{
-						Label = ZohoInventoryCustomFields.CallerID,
-						Value = zohoLead.Phone
-					};
+					//CustomField customField = new()
+					//{
+					//	Label = ZohoInventoryCustomFields.CallerID,
+					//	Value = zohoLead.CallerID
+					//};
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(zohoLead.Payout) ? zohoLead.Payout : 0.ToString() });
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Phone, Value = zohoLead.Phone });
 					zohoInventoryModel.Description = "Ringba Lead";

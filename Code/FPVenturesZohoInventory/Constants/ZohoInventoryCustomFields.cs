@@ -20,8 +20,8 @@ namespace FPVenturesZohoInventory.Constants
 		public static string CallDateTime = "Call Date/Time";
 		public static string UnbouncePageName = "Unbounce Page Name";
 		public static string IsContactFormLead = "IsContactFormLead";
-		public static string IsHeyFlowLead = "	IsHeyFlowLead";
-		public static string IsUnbounceLead = "	IsUnbounceLead";
+		public static string IsHeyFlowLead = "IsHeyFlowLead";
+		public static string IsUnbounceLead = "IsUnbounceLead";
 		public static string LeadId = "LeadId";
 
 	}
