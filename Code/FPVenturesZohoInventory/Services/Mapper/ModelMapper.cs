@@ -90,6 +90,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 				zohoInventoryModel.Source = "user";
 				zohoInventoryModel.Status = "active";
 				zohoInventoryModel.SKU = zohoLead.LeadId;
+				zohoInventoryModel.TrackSerialNumber = true;
 
 				zohoInventoryModel.CustomFields = customFields;
 				zohoInventoryRecords.Add(zohoInventoryModel);

@@ -15,6 +15,9 @@ namespace FPVenturesZohoInventory.Models
 
 	public class ZohoInventoryModel
 	{
+		[JsonProperty("track_serial_number")]
+		public bool TrackSerialNumber { get; set; }
+
 		[JsonProperty("rate")]
 		public decimal Rate { get; set; }
 

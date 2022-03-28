@@ -26,7 +26,7 @@ namespace FPVenturesZohoInventorySalesOrder
 		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%SalesOrderSchedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
-			string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddDays(-7));
+			string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddHours(-1));
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
@@ -37,7 +37,7 @@ namespace FPVenturesZohoInventorySalesOrder
 
 			var zohoLeads = _zohoLeadsService.GetZohoLeads(datetime, logger);
 
-			if (zohoLeads == null`
+			if (zohoLeads == null)
 			{
 				logger.LogInformation("Zoho return NULL ..... Stopped");
 				return;

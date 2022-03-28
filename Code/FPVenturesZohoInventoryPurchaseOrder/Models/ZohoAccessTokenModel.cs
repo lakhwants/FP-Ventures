@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace FPVenturesZohoInventorySalesOrder.Models
+namespace FPVenturesZohoInventoryPurchaseOrder.Models
 {
 	public class ZohoAccessTokenModel
     {

@@ -1,14 +1,13 @@
-﻿using FPVenturesZohoInventorySalesOrder.Models;
-using FPVenturesZohoInventorySalesOrder.Services.Interfaces;
-using FPVenturesZohoInventorySalesOrder.Shared;
+﻿using FPVenturesZohoInventoryPurchaseOrder.Models;
+using FPVenturesZohoInventoryPurchaseOrder.Services.Interfaces;
+using FPVenturesZohoInventoryPurchaseOrder.Shared;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace FPVenturesZohoInventorySalesOrder.Services
+namespace FPVenturesZohoInventoryPurchaseOrder.Services
 {
 	public class ZohoInventoryService : IZohoInventoryService
 	{
@@ -36,16 +35,6 @@ namespace FPVenturesZohoInventorySalesOrder.Services
 			return response.Data.AccessToken;
 		}
 
-		public InventoryResponse ConfirmSalesOrder(string salesOrderId)
-		{
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + String.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoInventorySalesOrderConfirmPath, salesOrderId));
-			var request = new RestRequest(Method.POST);
-			request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
-			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-			var response = client.Execute<InventoryResponse>(request);
-			return response.Data;
-		}
-
 		public ZohoInventoryTaxesModel GetZohoInventoryTaxes()
 		{
 			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryTaxesPath);
@@ -61,7 +50,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
 		{
 			List<InventoryItem> inventoryItems = new();
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddItemPath);
+			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryItemPath);
 
 			var batches = Utility.BuildBatches<Data>(zohoLeads, 90);
 
@@ -87,62 +76,21 @@ namespace FPVenturesZohoInventorySalesOrder.Services
 			return inventoryItems;
 		}
 
-		public ZohoInventorySalesOrderResponseModel PostSalesOrdertoZohoInventory(ZohoInventorySalesOrderModel zohoInventorySalesOrderModel)
+		public ZohoInventoryPurchaseOrderResponseModel PostPurchaseOrdertoZohoInventory(ZohoInventoryPurchaseOrderRequestModel zohoInventoryPurchaseOrderRequestModel)
 		{
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddSalesOrderPath);
+			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoPurchaseOrderPath);
 
 			var request = new RestRequest(Method.POST);
 			request.AddHeader("Content-Type", "text/plain");
 			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
 
-			var body = JsonConvert.SerializeObject(zohoInventorySalesOrderModel);
+			var body = JsonConvert.SerializeObject(zohoInventoryPurchaseOrderRequestModel);
 			request.AddParameter("text/plain", body, ParameterType.RequestBody);
 			request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
-			var response = client.Execute<ZohoInventorySalesOrderResponseModel>(request);
+			var response = client.Execute<ZohoInventoryPurchaseOrderResponseModel>(request);
 
 			return response.Data;
 		}
-
-		public ZohoInventoryInvoiceResponseModel PostInvoice(ZohoInventoryInvoiceRequestModel zohoInventoryInvoiceRequestModel)
-		{
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryInvoicePath);
-			var request = new RestRequest(Method.POST);
-			request.AddHeader("Content-Type", "text/plain");
-			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-			var body = JsonConvert.SerializeObject(zohoInventoryInvoiceRequestModel);
-			request.AddParameter("application/json", body, ParameterType.RequestBody);
-			request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
-			var response = client.Execute<ZohoInventoryInvoiceResponseModel>(request);
-
-			return response.Data;
-		}
-
-		public ZohoInventoryContactsResponseModel GetContactsFromZohoInventory()
-		{
-			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryContactsPath);
-			client.Timeout = -1;
-			var request = new RestRequest(Method.GET);
-			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-			request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
-
-			var response = client.Execute<ZohoInventoryContactsResponseModel>(request);
-			return response.Data;
-		}
-
-		public ZohoInventoryContactPersonResponseModel GetContactPersonFromZohoInventory(string customerId)
-		{
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + String.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryContactPersonPath, customerId));
-			client.Timeout = -1;
-			var request = new RestRequest(Method.GET);
-			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-			request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
-			var response = client.Execute<ZohoInventoryContactPersonResponseModel>(request);
-
-			return response.Data;
-
-		}
-
 	}
 }

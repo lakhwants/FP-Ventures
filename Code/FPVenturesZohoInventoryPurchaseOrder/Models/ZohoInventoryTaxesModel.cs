@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventorySalesOrder.Models
+namespace FPVenturesZohoInventoryPurchaseOrder.Models
 {
 	public class Tax
     {

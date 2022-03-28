@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FPVenturesZohoInventorySalesOrder.Shared
+namespace FPVenturesZohoInventoryPurchaseOrder.Shared
 {
 	public static class Utility
 	{

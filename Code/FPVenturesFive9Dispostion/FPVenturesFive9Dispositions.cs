@@ -30,8 +30,8 @@ namespace FPVenturesFive9Dispostion
 			logger.LogInformation($"{AzureFunctionName} Timer - {timerInfo.ScheduleStatus.Next}");
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
-			DateTime endDate = new DateTime(2021,10,8);
-			DateTime startDate = endDate.AddDays(0);
+			DateTime endDate = new DateTime(2022,2,2);
+			DateTime startDate = endDate.AddDays(-1);
 
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);

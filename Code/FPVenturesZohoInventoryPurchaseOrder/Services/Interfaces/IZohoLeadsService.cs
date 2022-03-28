@@ -1,8 +1,8 @@
-﻿using FPVenturesZohoInventorySalesOrder.Models;
+﻿using FPVenturesZohoInventoryPurchaseOrder.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventorySalesOrder.Services.Interfaces
+namespace FPVenturesZohoInventoryPurchaseOrder.Services.Interfaces
 {
 	public interface IZohoLeadsService
 	{

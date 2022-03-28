@@ -61,7 +61,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
 		{
 			List<InventoryItem> inventoryItems = new();
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryAddItemPath);
+			var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryItemPath);
 
 			var batches = Utility.BuildBatches<Data>(zohoLeads, 90);
 

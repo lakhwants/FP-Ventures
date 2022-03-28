@@ -25,8 +25,8 @@ namespace FPVentures
 		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
-			DateTime endDate = DateTime.Now;
-			DateTime startDate = endDate.AddHours(-6);
+			DateTime endDate = new DateTime(2022,2,9);
+			DateTime startDate = endDate.AddDays(-2);
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Timer - {timerInfo.ScheduleStatus.Next}");

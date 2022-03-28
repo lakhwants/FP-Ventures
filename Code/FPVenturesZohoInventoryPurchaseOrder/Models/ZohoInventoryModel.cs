@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventorySalesOrder.Models
+namespace FPVenturesZohoInventoryPurchaseOrder.Models
 {
 	public class CustomField
 	{

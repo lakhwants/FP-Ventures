@@ -25,7 +25,7 @@ namespace FPVenturesZohoInventory
 		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%ItemSchedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
-			string datetime = GetDateString(DateTime.Now.AddHours(-48));
+			string datetime = GetDateString(DateTime.Now.AddHours(-10));
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");

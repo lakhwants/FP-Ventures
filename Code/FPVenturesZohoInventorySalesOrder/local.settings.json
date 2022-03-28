@@ -1,7 +1,7 @@
 {
     "IsEncrypted": false,
   "Values": {
-    "PurchaseOrderSchedule": "0 */1 * * * *",
+    "SalesOrderSchedule": "0 */1 * * * *",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
 
@@ -11,7 +11,7 @@
 
     "ZohoInventoryBaseUrl": "https://inventory.zoho.com/api/v1/",
     "ZohoInventoryItemPath": "items",
-    "ZohoInventorySalesOrderPath": "salesorders",
+    "ZohoInventoryAddSalesOrderPath": "salesorders",
     "ZohoInventoryContactPersonPath": "contacts/{0}/contactpersons",
     "ZohoInventoryContactsPath": "contacts",
     "ZohoInventoryInvoicePath": "invoices?send=true",
@@ -20,7 +20,6 @@
     "ZohoInventorySalesOrderConfirmPath": "salesorders/{0}/status/confirmed",
     "ZohoInventorySearchParameter": "sku_contains",
     "ZohoInventoryTaxesPath": "settings/taxes",
-    "ZohoPurchaseOrderPath": "purchaseorders",
 
     "ZohoRefreshToken": "1000.3022959d47d1a763b20418547dfc858d.0477c63799d714855b82eca55a0c9550",
     "ZohoInventoryRefreshToken": "1000.a61d7310ce4d29554916cba0656c16f4.44b4a6015c910cd888d1b7656395d02f",

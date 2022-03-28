@@ -1,5 +1,5 @@
-﻿using FPVenturesZohoInventorySalesOrder.Models;
-using FPVenturesZohoInventorySalesOrder.Services.Interfaces;
+﻿using FPVenturesZohoInventoryPurchaseOrder.Models;
+using FPVenturesZohoInventoryPurchaseOrder.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
-namespace FPVenturesZohoInventorySalesOrder.Services
+namespace FPVenturesZohoInventoryPurchaseOrder.Services
 {
 	public class ZohoLeadsService : IZohoLeadsService
 	{

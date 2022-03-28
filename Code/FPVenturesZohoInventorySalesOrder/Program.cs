@@ -40,7 +40,7 @@ namespace FPVenturesZohoInventorySalesOrder
 				COQLQuery = Environment.GetEnvironmentVariable("COQLQuery") ?? string.Empty,
 				ZohoCOQLPath = Environment.GetEnvironmentVariable("ZohoCOQLPath") ?? string.Empty,
 				ZohoInventoryBaseUrl = Environment.GetEnvironmentVariable("ZohoInventoryBaseUrl") ?? string.Empty,
-				ZohoInventoryAddItemPath = Environment.GetEnvironmentVariable("ZohoInventoryAddItemPath") ?? string.Empty,
+				ZohoInventoryItemPath = Environment.GetEnvironmentVariable("ZohoInventoryItemPath") ?? string.Empty,
 				ZohoInventoryRefreshToken = Environment.GetEnvironmentVariable("ZohoInventoryRefreshToken") ?? string.Empty,
 				ZohoInventoryAddSalesOrderPath = Environment.GetEnvironmentVariable("ZohoInventoryAddSalesOrderPath") ?? string.Empty,
 				ZohoInventoryInvoicePath = Environment.GetEnvironmentVariable("ZohoInventoryInvoicePath") ?? string.Empty,
