@@ -29,7 +29,6 @@ namespace FPVenturesPestRouteDispositions.Services
 			//RunReport
 			MakeRequestToFive9(string.Format(SoapRequestBodies.RunReport, "Call Log Hawx Integration", endDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK"), startDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK")), _five9ZohoConfigurationSettings.Five9BaseUrl, _five9ZohoConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequest, out IAsyncResult asyncResult);
 			string reportId = GetValuesFromSoapResponse<string>(webRequest, asyncResult, "runReportResponse", "http://service.admin.ws.five9.com/");
-
 			if (string.IsNullOrEmpty(reportId))
 				return null;
 

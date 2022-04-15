@@ -24,34 +24,43 @@ namespace FPVenturesFive9Dispostion
 		[Function(AzureFunctionName)]
 		public void RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
-
+			List<string> removeDispositions = new()
+			{
+				"Did not Sell",
+				"No Answer",
+				"Answering Machine",
+				"Did Not Connect",
+				"Did Not Answer",
+				"Caller Disconnected"
+			};
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Timer - {timerInfo.ScheduleStatus.Next}");
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
-			DateTime endDate = new DateTime(2022,2,2);
-			DateTime startDate = endDate.AddDays(-1);
-
+			DateTime endDate = DateTime.Now;
+			DateTime startDate = endDate.AddDays(-2);
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);
-			if (five9Records == null || !five9Records.Any())
+			var five9FilteredRecords = five9Records.Where(x => !removeDispositions.Any(y => y == x.Disposition)).ToList();
+			if (five9FilteredRecords == null || !five9FilteredRecords.Any())
 			{
 				logger.LogInformation($"No records to add.....");
 				logger.LogInformation($"Finished.....");
 				return;
 			}
 
-			logger.LogInformation($"Records Five9 = {five9Records.Count}");
+			logger.LogInformation($"Records Five9 = {five9FilteredRecords.Count}");
 
-			var duplicateDispositionRecords = _zohoService.DuplicateZohoDispositions(five9Records);
+			var duplicateDispositionRecords = _zohoService.DuplicateZohoDispositions(five9FilteredRecords);
 
 			if (duplicateDispositionRecords == null)
 				return;
 
 			logger.LogInformation($"Duplicate Call Disposition records from ZOHO = {duplicateDispositionRecords.Count}");
 
-			var newDispositionsRecords = five9Records.Where(x => !duplicateDispositionRecords.Any(y => y.CallID == x.CallID)).ToList();
+			var newDispositionsRecords = five9FilteredRecords.Where(x => !duplicateDispositionRecords.Any(y => y.CallID == x.CallID)).ToList();
+			//var newDispositionsRecords = filteredDispositionsRecords.Where(x => x.Disposition != "No Answer" || x.Disposition != "Answering Machine" || x.Disposition != "Did Not Answer" || x.Disposition != "Did Not Connect" || x.Disposition != "Did not Sell").ToList();
 
 			var zohoLeadsRecords = _zohoService.GetZohoLeads(newDispositionsRecords);
 			if (zohoLeadsRecords == null)

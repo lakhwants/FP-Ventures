@@ -16,9 +16,9 @@ namespace FPVenturesZohoInventory.Services
 		public string ZohoAccessToken = string.Empty;
 		public ZohoCRMAndInventoryConfigurationSettings _ZohoCRMAndInventoryConfigurationSettings;
 
-		public ZohoLeadsService(ZohoCRMAndInventoryConfigurationSettings zohoHAWXConfigurationSettings)
+		public ZohoLeadsService(ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings											)
 		{
-			_ZohoCRMAndInventoryConfigurationSettings = zohoHAWXConfigurationSettings;
+			_ZohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfigurationSettings;
 		}
 
 		/// <summary>

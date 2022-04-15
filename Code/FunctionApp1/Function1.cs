@@ -2,7 +2,7 @@ using System;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace FPVenturesHawxIntegration
+namespace FunctionApp1
 {
     public static class Function1
     {

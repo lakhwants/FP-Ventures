@@ -26,3 +26,7 @@ Code/FPVenturesPestRouteDispositions/bin/
 Code/FPVenturesZohoInventorySalesOrder/bin/
 Code/FPVenturesZohoInventorySalesOrder/obj/
 Code/FPVenturesZohoInventoryPurchaseOrder/obj/
+Code/FPVentureFacebookLeadsToHAWX/bin/
+Code/FPVentureFacebookLeadsToHAWX/obj/FPVentureFacebookLeadsToHAWX.csproj.nuget.g.targets
+Code/FPVentureFacebookLeadsToHAWX/obj/
+Code/FunctionApp1/obj/

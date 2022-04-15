@@ -1,0 +1,25 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+		"Schedule": "0 */1 * * * *",
+
+		"ZohoBaseUrl": "https://www.zohoapis.com/crm/v2/",
+		"ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+		"ZohoAddDispositionsPath": "Dispositions",
+		"ZohoCheckDuplicateDispositionsPath": "Dispositions/search?criteria=({0})",
+		"ZohoCheckDuplicateLeadsPath": "Leads/search?criteria=({0})",
+
+		"ZohoRefreshToken": "1000.53379e5113b42493099a326e6a0cddc9.99b05e07e74a28c86d08337febd12665",
+		"ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+		"ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+		"SearchCriteria": "(Call_ID:equals:{0})",
+		"SearchOperator": "or",
+
+		"Five9BaseUrl": "https://api.five9.com/wsadmin/v4/AdminWebService",
+		"Five9ServiceNamespace": "http://service.admin.ws.five9.com/",
+		"Five9MethodAction": ""
+	}
+
+}

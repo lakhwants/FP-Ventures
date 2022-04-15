@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesHawxIntegration",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesZohoInventorySalesOrder", "FPVenturesZohoInventorySalesOrder\FPVenturesZohoInventorySalesOrder.csproj", "{B935C915-8548-4B91-B026-B2CAE361FCB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPVenturesZohoInventoryPurchaseOrder", "FPVenturesZohoInventoryPurchaseOrder\FPVenturesZohoInventoryPurchaseOrder.csproj", "{22909F12-A4D6-4F5E-B208-75BB688E17EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesZohoInventoryPurchaseOrder", "FPVenturesZohoInventoryPurchaseOrder\FPVenturesZohoInventoryPurchaseOrder.csproj", "{22909F12-A4D6-4F5E-B208-75BB688E17EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPVentureFacebookLeadsToHAWX", "FPVentureFacebookLeadsToHAWX\FPVentureFacebookLeadsToHAWX.csproj", "{DF08AF54-162F-4617-B1B7-9E4727E3FDFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{22909F12-A4D6-4F5E-B208-75BB688E17EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22909F12-A4D6-4F5E-B208-75BB688E17EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22909F12-A4D6-4F5E-B208-75BB688E17EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF08AF54-162F-4617-B1B7-9E4727E3FDFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF08AF54-162F-4617-B1B7-9E4727E3FDFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF08AF54-162F-4617-B1B7-9E4727E3FDFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF08AF54-162F-4617-B1B7-9E4727E3FDFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
