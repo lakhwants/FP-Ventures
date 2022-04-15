@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FPVenturesZohoInventoryPurchaseOrder.Models
+namespace DeleteUnAnsweredDispositionsFromZohoCRM.Models
 {
 	public class ZohoLeadsModel
 	{

@@ -1,4 +1,4 @@
-﻿namespace FPVenturesZohoInventoryPurchaseOrder.Models
+﻿namespace DeleteUnAnsweredDispositionsFromZohoCRM.Models
 {
 	public class ZohoErrorModel : Data
 	{

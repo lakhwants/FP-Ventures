@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace FPVenturesZohoInventoryPurchaseOrder.Models
+namespace DeleteUnAnsweredDispositionsFromZohoCRM.Models
 {
 	public class ZohoAccessTokenModel
     {

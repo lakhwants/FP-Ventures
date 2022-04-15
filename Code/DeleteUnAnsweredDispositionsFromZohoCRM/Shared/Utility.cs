@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FPVenturesZohoInventoryPurchaseOrder.Shared
+namespace DeleteUnAnsweredDispositionsFromZohoCRM.Shared
 {
 	public static class Utility
 	{

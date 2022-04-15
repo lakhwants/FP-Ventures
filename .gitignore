@@ -26,6 +26,6 @@ Code/FPVenturesPestRouteDispositions/bin/
 Code/FPVenturesZohoInventorySalesOrder/bin/
 Code/FPVenturesZohoInventorySalesOrder/obj/
 Code/FPVenturesZohoInventoryPurchaseOrder/obj/
-Code/ZohoInventoryPurchaseOrder/obj/
-Code/DeleteUnAnsweredDispositionsFromZohoCRM/obj/
 Code/DeleteUnAnsweredDispositionsFromZohoCRM/bin/
+Code/DeleteUnAnsweredDispositionsFromZohoCRM/obj/
+Code/ZohoInventoryPurchaseOrder/obj/

@@ -1,8 +1,8 @@
-﻿using FPVenturesZohoInventoryPurchaseOrder.Models;
+﻿using DeleteUnAnsweredDispositionsFromZohoCRM.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventoryPurchaseOrder.Services.Interfaces
+namespace DeleteUnAnsweredDispositionsFromZohoCRM.Services.Interfaces
 {
 	public interface IZohoLeadsService
 	{

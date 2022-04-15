@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FPVenturesZohoInventoryPurchaseOrder.Models
+namespace DeleteUnAnsweredDispositionsFromZohoCRM.Models
 {
 	public class CustomField
 	{
@@ -15,6 +15,9 @@ namespace FPVenturesZohoInventoryPurchaseOrder.Models
 
 	public class ZohoInventoryModel
 	{
+		[JsonProperty("rate")]
+		public decimal Rate { get; set; }
+
 		[JsonProperty("sku")]
 		public long SKU { get; set; }
 

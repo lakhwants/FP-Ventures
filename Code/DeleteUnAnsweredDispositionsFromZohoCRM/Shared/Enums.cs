@@ -1,4 +1,4 @@
-﻿namespace FPVenturesZohoInventoryPurchaseOrder.Shared
+﻿namespace FPVenturesZohoInventory.Shared
 {
 	public class Enums
 	{
