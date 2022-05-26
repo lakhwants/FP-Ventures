@@ -1,4 +1,4 @@
-﻿namespace ConsoleFPVentures.Constants
+﻿namespace FPVentures.Constants
 {
 	public static class RingbaCallLogDetails
 	{

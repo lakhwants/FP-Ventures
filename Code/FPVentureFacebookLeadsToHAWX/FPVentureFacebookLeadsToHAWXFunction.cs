@@ -1,18 +1,18 @@
 using FPVentureFacebookLeadsToHAWX.Models;
 using FPVentureFacebookLeadsToHAWX.Services.Interfaces;
 using FPVentureFacebookLeadsToHAWX.Services.Mapper;
+
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 
 namespace FPVentureFacebookLeadsToHAWX
 {
-	public class FPVentureFacebookLeadsToHAWXFunction
+    public class FPVentureFacebookLeadsToHAWXFunction
     {
 		readonly IHAWXZohoLeadsService _hawxZohoLeadsService;
 		readonly IZohoLeadsService _zohoLeadsService;
@@ -78,6 +78,8 @@ namespace FPVentureFacebookLeadsToHAWX
 			logger.LogInformation($"Leads failed to add = {errorModels.Count}");
 
 			LogErrorModels(logger, errorModels);
+
+			_zohoLeadsService.UpdateCRMFacebookLead(newLeads);
 			logger.LogInformation($"Finish.....");
 			response.WriteString("Finished");
 			return response;

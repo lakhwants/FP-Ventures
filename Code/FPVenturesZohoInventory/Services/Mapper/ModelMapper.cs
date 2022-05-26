@@ -76,11 +76,7 @@ namespace FPVenturesZohoInventory.Services.Mapper
 				else
 				{
 					zohoInventoryModel.Name = $"{zohoLead.FirstName} {zohoLead.LastName}";
-					//CustomField customField = new()
-					//{
-					//	Label = ZohoInventoryCustomFields.CallerID,
-					//	Value = zohoLead.CallerID
-					//};
+					
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(zohoLead.Payout) ? zohoLead.Payout : 0.ToString() });
 					customFields.Add(new CustomField { Label = ZohoInventoryCustomFields.Phone, Value = zohoLead.Phone });
 					zohoInventoryModel.Description = "Ringba Lead";

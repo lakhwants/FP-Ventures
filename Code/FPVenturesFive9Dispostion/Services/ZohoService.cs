@@ -27,12 +27,12 @@ namespace FPVenturesFive9Disposition.Services
 		/// <returns></returns>
 		public List<Data> GetZohoLeads(List<Five9Model> phoneNumbers)
 		{
-			string SearchCriteria = "(Caller_ID:equals:{0})";
+			string SearchCriteria = "((Caller_ID:equals:{0})or(Phone:equals:{0}))";
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
 			List<Data> zohoLeadsModels = new();
 			ZohoLeadsModel zohoLeadsModelResponse = new();
 			string criteriaString = "";
-			var batches = Utility.BuildBatches(phoneNumbers, 10);
+			var batches = Utility.BuildBatches(phoneNumbers, 5);
 
 			foreach (var batch in batches)
 			{

@@ -1,6 +1,7 @@
 ﻿using FPVenturesFive9PestRouteDispositions.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FPVenturesFive9PestRouteDispositions.Services.Mapper
 {
@@ -45,7 +46,7 @@ namespace FPVenturesFive9PestRouteDispositions.Services.Mapper
 			return callDispositionErrorModel;
 		}
 
-		public static CallDispositionModel MapFive9ModelCallDispositionModel(List<Five9Model> five9Models)
+		public static CallDispositionModel MapFive9ModelCallDispositionModel(List<Data> zohoLeads, List<Five9Model> five9Models)
 		{
 			CallDispositionModel callDispositionModel = new();
 			List<CallDispositionRecordModel> callDispositionRecordModels = new();
@@ -53,26 +54,39 @@ namespace FPVenturesFive9PestRouteDispositions.Services.Mapper
 			{
 				//foreach (var zoholead in zohoLeads.Where(lead => lead.Phone == five9Model.DNIS))
 				//{
-					//if (!zohoLeads.Any(x => !x.IsDuplicate))
-					//	continue;
+				//if (!zohoLeads.Any(x => !x.IsDuplicate))
+				//	contiīnue;
 
-					CallDispositionRecordModel callDispositionModelRecord = new();
-					callDispositionModelRecord.CustomerNumber = five9Model.DNIS;
-					//callDispositionModelRecord.LeadID = zoholead.Id;
-					callDispositionModelRecord.CallID = five9Model.CallID;
-					callDispositionModelRecord.ANI = five9Model.ANI;
-					callDispositionModelRecord.AgentName = five9Model.AgentName;
-					callDispositionModelRecord.DNIS = five9Model.DNIS;
-					callDispositionModelRecord.Disposition = five9Model.Disposition;
-					callDispositionModelRecord.Campaign = five9Model.Campaign;
-					callDispositionModelRecord.CallType = five9Model.CallType;
-					callDispositionModelRecord.ListName = five9Model.ListName;
-					callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"'));
-					//callDispositionModelRecord.LeadRecordID = zoholead.Id;
-					callDispositionModelRecord.IsPestRouteDisposition = true;
+				//if (!zohoLeads.Any(x => x.CallerID == five9Model.ANI))
+				//	continue;
 
+				CallDispositionRecordModel callDispositionModelRecord = new();
+				callDispositionModelRecord.CustomerNumber = five9Model.DNIS;
+				callDispositionModelRecord.CallID = five9Model.CallID;
+				callDispositionModelRecord.ANI = five9Model.ANI;
+				callDispositionModelRecord.AgentName = five9Model.AgentName;
+				callDispositionModelRecord.DNIS = five9Model.DNIS;
+				callDispositionModelRecord.Disposition = five9Model.Disposition;
+				callDispositionModelRecord.Campaign = five9Model.Campaign;
+				callDispositionModelRecord.CallType = five9Model.CallType;
+				callDispositionModelRecord.ListName = five9Model.ListName;
+				callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"'));
+				callDispositionModelRecord.IsPestRouteDisposition = true;
+
+				if (zohoLeads.Any(x => x.CallerID == five9Model.ANI))
+				{
+					callDispositionModelRecord.LeadRecordID = zohoLeads.Any(x => x.CallerID == five9Model.ANI && !x.IsDuplicate) ? zohoLeads.Where(x => x.CallerID == five9Model.ANI && !x.IsDuplicate).FirstOrDefault().Id : null;
+					callDispositionModelRecord.LeadID = zohoLeads.Any(x => x.CallerID == five9Model.ANI && !x.IsDuplicate) ? zohoLeads.Where(x => x.CallerID == five9Model.ANI && !x.IsDuplicate).FirstOrDefault().Id : null;
+					callDispositionModelRecord.RingbaOrUnbounce = "Ringba";
 					callDispositionRecordModels.Add(callDispositionModelRecord);
-				//}
+				}
+				else if (zohoLeads.Any(x => x.Phone == five9Model.DNIS))
+				{
+					callDispositionModelRecord.LeadRecordID = zohoLeads.Any(x => x.Phone == five9Model.DNIS && !x.IsDuplicate) ? zohoLeads.Where(x => x.Phone == five9Model.DNIS && !x.IsDuplicate).FirstOrDefault().Id : null;
+					callDispositionModelRecord.LeadID = zohoLeads.Any(x => x.Phone == five9Model.DNIS && !x.IsDuplicate) ? zohoLeads.Where(x => x.Phone == five9Model.DNIS && !x.IsDuplicate).FirstOrDefault().Id : null;
+					callDispositionModelRecord.RingbaOrUnbounce = "Web Lead";
+					callDispositionRecordModels.Add(callDispositionModelRecord);
+				}
 			}
 
 			callDispositionModel.Data = callDispositionRecordModels;

@@ -80,15 +80,12 @@ namespace FPVentureFacebookLeadsToHAWX.Services
 				}
 				CreateErrorSuccessModels(errorData, batch, response);
 				data.AddRange(response.Data.Data.Where(x => x.Status == Enums.Status.success.ToString()));
-				var lead = new HawxZohoLeadsModel();
-				lead.data = batch;
-				UpdateCRMFacebookLead(lead);
 			}
 
 			return (data, errorData);
 		}
 
-		public void UpdateCRMFacebookLead(HawxZohoLeadsModel records)
+		public void UpdateCRMFacebookLead(ZohoLeadsModel records)
 		{
 			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
 			var client = new RestClient(_zohoHAWXConfigurationSettings.ZohoLeadsBaseUrl + _zohoHAWXConfigurationSettings.ZohoAddLeadsPath);

@@ -1,5 +1,6 @@
 ﻿using FPVentureFacebookLeadsToHAWX.Models;
 using FPVentureFacebookLeadsToHAWX.Services.Interfaces;
+using FPVentureFacebookLeadsToHAWX.Shared;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -37,6 +38,21 @@ namespace FPVentureFacebookLeadsToHAWX.Services
 				return null;
 
 			return response.Data.AccessToken;
+		}
+
+		public void UpdateCRMFacebookLead(List<Data> records)
+		{
+			ZohoLeadsModel zohoLeadsModel = new();
+			zohoLeadsModel.Data = records;
+			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+			var client = new RestClient(_zohoHAWXConfigurationSettings.ZohoLeadsBaseUrl + _zohoHAWXConfigurationSettings.ZohoAddLeadsPath);
+			var request = new RestRequest(Method.PUT);
+			request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+			var data = Utility.UpdateZohoCRMLeads(zohoLeadsModel);
+
+			var body = JsonConvert.SerializeObject(data);
+			request.AddParameter("text/plain", body, ParameterType.RequestBody);
+			IRestResponse response = client.Execute(request);
 		}
 
 

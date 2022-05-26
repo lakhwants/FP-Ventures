@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleFPVentures.Constants
+namespace FPVentures.Constants
 {
 	public static class RingbaColumns
 	{

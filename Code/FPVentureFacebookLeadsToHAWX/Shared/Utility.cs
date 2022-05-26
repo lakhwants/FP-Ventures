@@ -14,12 +14,11 @@ namespace FPVentureFacebookLeadsToHAWX.Shared
 				.Select(x => x.Select(v => v.Value).ToList())
 				.ToList();
 		}
-		public static HawxZohoLeadsModel UpdateZohoCRMLeads(HawxZohoLeadsModel records)
+		public static ZohoLeadsModel UpdateZohoCRMLeads(ZohoLeadsModel records)
 		{
-			foreach(var record in records.data)
+			foreach(var record in records.Data)
 			{
 				record.IsFacebookLead = true;
-				
 			}
 			return records;
 		}

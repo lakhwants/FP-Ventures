@@ -9,190 +9,193 @@ using System.Linq;
 
 namespace FPVenturesFive9PestRouteDispositions.Services
 {
-	public class ZohoService : IZohoService
-	{
-		public string ZohoAccessToken = string.Empty;
-		public readonly Five9ZohoConfigurationSettings _five9ZohoConfigurationSettings;
-		public ZohoService(Five9ZohoConfigurationSettings five9ZohoConfigurationSettings)
-		{
-			_five9ZohoConfigurationSettings = five9ZohoConfigurationSettings;
-		}
-		//public string SearchCriteria = "(Caller_ID:equals:{0})";
+    public class ZohoService : IZohoService
+    {
+        public string ZohoAccessToken = string.Empty;
+        public readonly Five9ZohoConfigurationSettings _five9ZohoConfigurationSettings;
+        public ZohoService(Five9ZohoConfigurationSettings five9ZohoConfigurationSettings)
+        {
+            _five9ZohoConfigurationSettings = five9ZohoConfigurationSettings;
+        }
+        //public string SearchCriteria = "(Caller_ID:equals:{0})";
 
-		/// <summary>
-		/// Check for duplicate leads in ZOHO using the inbound ID
-		/// </summary>
-		/// <param name="ringbaRecords"></param>
-		/// <returns></returns>
-		public List<Data> GetZohoLeads(List<Five9Model> phoneNumbers)
-		{
-			string SearchCriteria = "(Phone:equals:{0})";
-			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			List<Data> zohoLeadsModels = new();
-			ZohoLeadsModel zohoLeadsModelResponse = new();
-			string criteriaString = "";
-			var batches = Utility.BuildBatches(phoneNumbers.Select(x => x.DNIS).Distinct().ToList(), 10);
+        /// <summary>
+        /// Check for duplicate leads in ZOHO using the inbound ID
+        /// </summary>
+        /// <param name="ringbaRecords"></param>
+        /// <returns></returns>
+        public List<Data> GetZohoLeads(List<Five9Model> phoneNumbers)
+        {
+            string SearchCriteria = "((Caller_ID:equals:{0})or(Phone:equals:{0}))";
+            ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+            List<Data> zohoLeadsModels = new();
+            ZohoLeadsModel zohoLeadsModelResponse = new();
+            string criteriaString = "";
+            var batches = Utility.BuildBatches(phoneNumbers.Select(x => x.DNIS).Distinct().ToList(), 5);
 
-			foreach (var batch in batches)
-			{
-				var lastRecord = batch.LastOrDefault();
-				foreach (var fields in batch)
-				{
-					criteriaString += string.Format(SearchCriteria, fields);
+            foreach (var batch in batches)
+            {
+                var lastRecord = batch.LastOrDefault();
+                foreach (var fields in batch)
+                {
+                    if (string.IsNullOrEmpty(fields))
+                        continue;
 
-					if (lastRecord != fields)
-						criteriaString += "or";
-				}
+                    criteriaString += string.Format(SearchCriteria, fields);
 
-				var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + string.Format(_five9ZohoConfigurationSettings.ZohoCheckDuplicateLeadsPath, criteriaString))
-				{
-					Timeout = -1
-				};
-				var request = new RestRequest(Method.GET);
-				request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-				var response = client.Execute<ZohoLeadsModel>(request);
+                    if (lastRecord != fields)
+                        criteriaString += "or";
+                }
 
-				criteriaString = string.Empty;
+                var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + string.Format(_five9ZohoConfigurationSettings.ZohoCheckDuplicateLeadsPath, criteriaString))
+                {
+                    Timeout = -1
+                };
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                var response = client.Execute<ZohoLeadsModel>(request);
 
-				if (response == null)
-					return null;
+                criteriaString = string.Empty;
 
-				if (response.Data == null)
-					continue;
+                if (response == null)
+                    return null;
 
-				if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
-					zohoLeadsModels.AddRange(response.Data.Data.Where(x => x.IsUnbounceRecord));
-			}
+                if (response.Data == null)
+                    continue;
 
-			return zohoLeadsModels.ToList();
-		}
+                if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
+                    zohoLeadsModels.AddRange(response.Data.Data);
+            }
 
-		/// <summary>
-		/// Check for duplicate Disposition records in ZOHO using the inbound ID
-		/// </summary>
-		/// <param name="ringbaRecords"></param>
-		/// <returns></returns>
-		public List<CallDispositionRecordModel> DuplicateZohoDispositions(List<Five9Model> five9Models)
-		{
-			string SearchCriteria = "(Call_ID:equals:{0})";
-			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			List<CallDispositionRecordModel> callDispositionRecordModels = new();
-			string criteriaString = "";
-			var batches = Utility.BuildBatches(five9Models, 10);
+            return zohoLeadsModels.ToList();
+        }
 
-			foreach (var batch in batches)
-			{
-				var lastRecord = batch.LastOrDefault();
-				foreach (var fields in batch)
-				{
-					criteriaString += string.Format(SearchCriteria, fields.CallID);
+        /// <summary>
+        /// Check for duplicate Disposition records in ZOHO using the inbound ID
+        /// </summary>
+        /// <param name="ringbaRecords"></param>
+        /// <returns></returns>
+        public List<CallDispositionRecordModel> DuplicateZohoDispositions(List<Five9Model> five9Models)
+        {
+            string SearchCriteria = "(Call_ID:equals:{0})";
+            ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+            List<CallDispositionRecordModel> callDispositionRecordModels = new();
+            string criteriaString = "";
+            var batches = Utility.BuildBatches(five9Models, 10);
 
-					if (lastRecord.CallID != fields.CallID)
-						criteriaString += "or";
-				}
+            foreach (var batch in batches)
+            {
+                var lastRecord = batch.LastOrDefault();
+                foreach (var fields in batch)
+                {
+                    criteriaString += string.Format(SearchCriteria, fields.CallID);
 
-				var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + string.Format(_five9ZohoConfigurationSettings.ZohoCheckDuplicateDispositionsPath, criteriaString))
-				{
-					Timeout = -1
-				};
-				var request = new RestRequest(Method.GET);
-				request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-				var response = client.Execute<CallDispositionModel>(request);
+                    if (lastRecord.CallID != fields.CallID)
+                        criteriaString += "or";
+                }
 
-				criteriaString = string.Empty;
+                var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + string.Format(_five9ZohoConfigurationSettings.ZohoCheckDuplicateDispositionsPath, criteriaString))
+                {
+                    Timeout = -1
+                };
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                var response = client.Execute<CallDispositionModel>(request);
 
-				if (response == null)
-					return null;
+                criteriaString = string.Empty;
 
-				if (response.Data == null)
-					continue;
+                if (response == null)
+                    return null;
 
-				if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
-					callDispositionRecordModels.AddRange(response.Data.Data);
-			}
+                if (response.Data == null)
+                    continue;
 
-			return callDispositionRecordModels.ToList();
-		}
+                if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
+                    callDispositionRecordModels.AddRange(response.Data.Data);
+            }
 
-		public (List<Datum> successModels, List<ZohoCallDispositionErrorModel> errorModels) PostZohoDispositions(CallDispositionModel callDispositionModel)
-		{
-			List<Datum> data = new();
-			List<ZohoCallDispositionErrorModel> errorData = new();
-			ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-			var batches = Utility.BuildBatches(callDispositionModel.Data, 100);
-			var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + _five9ZohoConfigurationSettings.ZohoAddDispositionsPath)
-			{
-				Timeout = -1
-			};
+            return callDispositionRecordModels.ToList();
+        }
 
-			foreach (var batch in batches)
-			{
-				CallDispositionModel callDispositionModelBatch = new()
-				{
-					Data = batch
-				};
+        public (List<Datum> successModels, List<ZohoCallDispositionErrorModel> errorModels) PostZohoDispositions(CallDispositionModel callDispositionModel)
+        {
+            List<Datum> data = new();
+            List<ZohoCallDispositionErrorModel> errorData = new();
+            ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+            var batches = Utility.BuildBatches(callDispositionModel.Data, 100);
+            var client = new RestClient(_five9ZohoConfigurationSettings.ZohoBaseUrl + _five9ZohoConfigurationSettings.ZohoAddDispositionsPath)
+            {
+                Timeout = -1
+            };
 
-				var request = new RestRequest(Method.POST);
-				request.AddHeader("Content-Type", "text/plain");
-				request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+            foreach (var batch in batches)
+            {
+                CallDispositionModel callDispositionModelBatch = new()
+                {
+                    Data = batch
+                };
 
-				var body = JsonConvert.SerializeObject(callDispositionModelBatch);
-				request.AddParameter("text/plain", body, ParameterType.RequestBody);
-				var response = client.Execute<ZohoResponseModel>(request);
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Content-Type", "text/plain");
+                request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
 
-				if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-				{
-					var requestRetry = new RestRequest(Method.POST);
-					requestRetry.AddHeader("Content-Type", "text/plain");
-					ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-					requestRetry.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-					requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
-					response = client.Execute<ZohoResponseModel>(request);
-				}
-				CreateErrorSuccessModels(errorData, batch, response);
+                var body = JsonConvert.SerializeObject(callDispositionModelBatch);
+                request.AddParameter("text/plain", body, ParameterType.RequestBody);
+                var response = client.Execute<ZohoResponseModel>(request);
 
-				data.AddRange(response.Data.Data.Where(x => x.Status == Enums.Status.success.ToString()));
-			}
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var requestRetry = new RestRequest(Method.POST);
+                    requestRetry.AddHeader("Content-Type", "text/plain");
+                    ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+                    requestRetry.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                    requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
+                    response = client.Execute<ZohoResponseModel>(request);
+                }
+                CreateErrorSuccessModels(errorData, batch, response);
 
-			return (data, errorData);
-		}
+                data.AddRange(response.Data.Data.Where(x => x.Status == Enums.Status.success.ToString()));
+            }
 
-		private static void CreateErrorSuccessModels(List<ZohoCallDispositionErrorModel> errorData, List<CallDispositionRecordModel> batch, IRestResponse<ZohoResponseModel> response)
-		{
-			var indicis = response.Data.Data.Select((c, i) => new { c.Status, c.Details.ApiName, c.Message, Index = i })
-												 .Where(x => x.Status == Enums.Status.error.ToString())
-												 .Select(x => new { x.Index, x.ApiName, x.Status, x.Message });
+            return (data, errorData);
+        }
 
-			foreach (var index in indicis)
-			{
-				var errorModel = batch.ElementAt(index.Index);
+        private static void CreateErrorSuccessModels(List<ZohoCallDispositionErrorModel> errorData, List<CallDispositionRecordModel> batch, IRestResponse<ZohoResponseModel> response)
+        {
+            var indicis = response.Data.Data.Select((c, i) => new { c.Status, c.Details.ApiName, c.Message, Index = i })
+                                                 .Where(x => x.Status == Enums.Status.error.ToString())
+                                                 .Select(x => new { x.Index, x.ApiName, x.Status, x.Message });
 
-				var callDispositionErrorModel = ModelMapper.MapCallDispostionsToCallDispostionsErrorModel(errorModel);
-				callDispositionErrorModel.Message = index.Message.ToUpper();
-				callDispositionErrorModel.Status = index.Status.ToUpper();
-				callDispositionErrorModel.ApiName = index.ApiName;
+            foreach (var index in indicis)
+            {
+                var errorModel = batch.ElementAt(index.Index);
 
-				errorData.Add(callDispositionErrorModel);
-			}
-		}
+                var callDispositionErrorModel = ModelMapper.MapCallDispostionsToCallDispostionsErrorModel(errorModel);
+                callDispositionErrorModel.Message = index.Message.ToUpper();
+                callDispositionErrorModel.Status = index.Status.ToUpper();
+                callDispositionErrorModel.ApiName = index.ApiName;
 
-		/// <summary>
-		/// Gets Access Token for Zoho
-		/// </summary>
-		/// <returns></returns>
-		private string GetZohoAccessTokenFromRefreshToken()
-		{
-			var client = new RestClient(string.Format(_five9ZohoConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, "1000.53379e5113b42493099a326e6a0cddc9.99b05e07e74a28c86d08337febd12665", "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK", "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5"))
-			{
-				Timeout = -1
-			};
-			var request = new RestRequest(Method.POST);
-			var response = client.Execute<ZohoAccessTokenModel>(request);
+                errorData.Add(callDispositionErrorModel);
+            }
+        }
 
-			if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK)
-				return null;
+        /// <summary>
+        /// Gets Access Token for Zoho
+        /// </summary>
+        /// <returns></returns>
+        private string GetZohoAccessTokenFromRefreshToken()
+        {
+            var client = new RestClient(string.Format(_five9ZohoConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, "1000.53379e5113b42493099a326e6a0cddc9.99b05e07e74a28c86d08337febd12665", "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK", "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5"))
+            {
+                Timeout = -1
+            };
+            var request = new RestRequest(Method.POST);
+            var response = client.Execute<ZohoAccessTokenModel>(request);
 
-			return response.Data.AccessToken;
-		}
-	}
+            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK)
+                return null;
+
+            return response.Data.AccessToken;
+        }
+    }
 }

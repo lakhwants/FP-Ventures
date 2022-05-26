@@ -40,7 +40,7 @@ namespace FPVenturesFive9PestRouteDispositions
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
 			DateTime endDate = DateTime.Now;
-			DateTime startDate = endDate.AddDays(-1);
+			DateTime startDate = endDate.AddHours(-3);
 
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);
@@ -65,7 +65,16 @@ namespace FPVenturesFive9PestRouteDispositions
 			logger.LogInformation($"Duplicate Call Disposition records from ZOHO = {duplicateDispositionRecords.Count}");
 
 			var newDispositionsRecords = five9FilteredRecords.Where(x => !duplicateDispositionRecords.Any(y => y.CallID == x.CallID)).ToList();
-			var dispositionRecordModels = ModelMapper.MapFive9ModelCallDispositionModel(newDispositionsRecords);
+			//var newDispositionsRecords = filteredDispositionsRecords.Where(x => x.Disposition != "No Answer" || x.Disposition != "Answering Machine" || x.Disposition != "Did Not Answer" || x.Disposition != "Did Not Connect" || x.Disposition != "Did not Sell").ToList();
+
+			var zohoLeadsRecords = _zohoService.GetZohoLeads(newDispositionsRecords);
+			if (zohoLeadsRecords == null)
+				return;
+
+		//	logger.LogInformation($"Duplicate Call Disposition records from ZOHO = {duplicateDispositionRecords.Count}");
+
+			//var newDispositionsRecords = five9FilteredRecords.Where(x => !duplicateDispositionRecords.Any(y => y.CallID == x.CallID)).ToList();
+			var dispositionRecordModels = ModelMapper.MapFive9ModelCallDispositionModel(zohoLeadsRecords, newDispositionsRecords);
 			logger.LogInformation($"Disposition records to add = {dispositionRecordModels.Data.Count}");
 
 
