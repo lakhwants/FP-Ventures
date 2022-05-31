@@ -5,17 +5,9 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 {
 	public class LineItem : CustomField
 	{
-		[JsonProperty("item_id")]
-		public string ItemId { get; set; }
-
-		[JsonProperty("sku")]
-		public string SKU { get; set; }
 
 		[JsonProperty("name")]
 		public string Name { get; set; }
-
-		[JsonProperty("description")]
-		public string Description { get; set; }
 
 		[JsonProperty("rate")]
 		public string Rate { get; set; }
@@ -32,7 +24,11 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 
 	public class ZohoInventorySalesOrderModel
 	{
-		[JsonProperty("customer_id")]
+
+		[JsonProperty("invoiced_status")]
+        public string InvoicedStatus { get; set; }
+
+        [JsonProperty("customer_id")]
 		public string CustomerId { get; set; }
 
 		[JsonProperty("line_items")]

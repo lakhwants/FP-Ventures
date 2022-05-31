@@ -141,6 +141,9 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("cf_publisher_name")]
         public string CfPublisherName { get; set; }
 
+        [JsonProperty("cf_target_name")]
+        public string CfTargetName { get; set; }
+
         [JsonProperty("cf_duration")]
         public string CfDuration { get; set; }
 
@@ -169,10 +172,11 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         public string Comparator { get; set; }
     }
 
-    public class ZohoInventoryItemModel : PageContext
+    public class ZohoInventoryItemModel : InventoryResponse
     {
         [JsonProperty("items")]
         public List<InventoryItem> Items { get; set; }
+        public PageContext page_context { get; set; }
     }
 
 

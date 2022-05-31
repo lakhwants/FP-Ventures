@@ -12,21 +12,27 @@ namespace FPVenturesZohoInventorySalesOrder
 	public class FPVenturesZohoInventorySalesOrderFunction
 	{
 		readonly IZohoInventoryService _zohoInventoryService;
-		readonly IZohoLeadsService _zohoLeadsService;
 		public ZohoCRMAndInventoryConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
 		const string AzureFunctionName = "FPVenturesZohoInventorySalesOrderFunction";
 
 		public FPVenturesZohoInventorySalesOrderFunction(IZohoLeadsService zohoLeadsService, IZohoInventoryService zohoInventoryService, ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfiguration)
 		{
 			_zohoInventoryService = zohoInventoryService;
-			_zohoLeadsService = zohoLeadsService;
 			_zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfiguration;
-		}
+		}	
 
 		[Function(AzureFunctionName)]
 		public async Task RunAsync([TimerTrigger("%SalesOrderSchedule%")] TimerInfo timerInfo, FunctionContext context)
 		{
 			string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddHours(-1));
+
+			//DateTime lastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+			//DateTime endDate = lastMonth.AddDays(-1);
+			//DateTime startDate = lastMonth.AddMonths(-1);
+			DateTime endDate = DateTime.Now.Date;
+			DateTime startDate = endDate.AddMonths(-1);
+
 			var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
@@ -35,25 +41,11 @@ namespace FPVenturesZohoInventorySalesOrder
 
 			logger.LogInformation($"{datetime}");
 
-			var zohoLeads = _zohoLeadsService.GetZohoLeads(datetime, logger);
-
-			if (zohoLeads == null)
-			{
-				logger.LogInformation("Zoho return NULL ..... Stopped");
-				return;
-			}
-
-			if (!zohoLeads.Any())
-			{
-				logger.LogInformation("No new Lead found");
-				return;
-			}
-
 			logger.LogInformation("Fetching Taxes from Inventory");
 			var taxes = _zohoInventoryService.GetZohoInventoryTaxes();
 
 			logger.LogInformation("Fetching Items Ids from Inventory");
-			var inventoryItems = _zohoInventoryService.GetInventoryItems(zohoLeads);
+			var inventoryItems = _zohoInventoryService.GetInventoryItems(startDate,endDate);
 
 			logger.LogInformation("Fetching Contacts from Inventory");
 
@@ -101,12 +93,9 @@ namespace FPVenturesZohoInventorySalesOrder
 
 			foreach (var item in zohoInventoryInvoiceResponseModel1.Invoice.LineItems)
 			{
-				logger.LogWarning($"{nameof(item.ItemId)} = {(item.ItemId)}, " +
-					$"{nameof(item.Name)} = {(item.Name)}, " +
+				logger.LogWarning($"{nameof(item.Name)} = {(item.Name)}, " +
 					$"{nameof(item.Rate)} = {(item.Rate)}, " +
-					$"{nameof(item.SKU)} = {(item.SKU)}, " +
-					$"{nameof(item.TaxId)} = {(item.TaxId)}, " +
-					$"{nameof(item.Description)} = {(item.Description)}");
+					$"{nameof(item.TaxId)} = {(item.TaxId)} " );
 			}
 
 		}
@@ -120,12 +109,9 @@ namespace FPVenturesZohoInventorySalesOrder
 
 			foreach (var item in zohoInventoryResponseModel.SalesOrder.LineItems)
 			{
-				logger.LogWarning($"{nameof(item.ItemId)} = {(item.ItemId)}, " +
-					$"{nameof(item.Name)} = {(item.Name)}, " +
-					$"{nameof(item.Rate)} = {(item.Rate)}, " +
-					$"{nameof(item.SKU)} = {(item.SKU)}, " +
-					$"{nameof(item.TaxId)} = {(item.TaxId)}, " +
-					$"{nameof(item.Description)} = {(item.Description)}");
+				logger.LogWarning($"{nameof(item.Name)} = {(item.Name)}, " +
+			$"{nameof(item.Rate)} = {(item.Rate)}, " +
+			$"{nameof(item.TaxId)} = {(item.TaxId)} ");
 			}
 
 		}
