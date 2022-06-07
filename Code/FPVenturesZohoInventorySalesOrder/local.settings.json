@@ -14,7 +14,7 @@
     "ZohoInventoryAddSalesOrderPath": "salesorders",
     "ZohoInventoryContactPersonPath": "contacts/{0}/contactpersons",
     "ZohoInventoryContactsPath": "contacts",
-    "ZohoInventoryInvoicePath": "invoices?send=true",
+    "ZohoInventoryInvoicePath": "invoices",
     "ZohoInventoryCustomerName": "Hawx Services",
     "ZohoInventoryOrganizationId": "758026604",
     "ZohoInventorySalesOrderConfirmPath": "salesorders/{0}/status/confirmed",

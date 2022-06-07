@@ -26,14 +26,14 @@ namespace FPVenturesZohoInventorySalesOrder
 		{
 			string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddHours(-1));
 
-			//DateTime lastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            //DateTime lastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 
-			//DateTime endDate = lastMonth.AddDays(-1);
-			//DateTime startDate = lastMonth.AddMonths(-1);
-			DateTime endDate = DateTime.Now.Date;
-			DateTime startDate = endDate.AddMonths(-1);
+            //DateTime endDate = lastMonth.AddDays(-1);
+            //DateTime startDate = lastMonth.AddMonths(-1);
+            DateTime endDate = DateTime.Now;
+            DateTime startDate = endDate.AddDays(-1);
 
-			var logger = context.GetLogger(AzureFunctionName);
+            var logger = context.GetLogger(AzureFunctionName);
 
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
@@ -41,8 +41,8 @@ namespace FPVenturesZohoInventorySalesOrder
 
 			logger.LogInformation($"{datetime}");
 
-			logger.LogInformation("Fetching Taxes from Inventory");
-			var taxes = _zohoInventoryService.GetZohoInventoryTaxes();
+			//logger.LogInformation("Fetching Taxes from Inventory");
+			//var taxes = _zohoInventoryService.GetZohoInventoryTaxes();
 
 			logger.LogInformation("Fetching Items Ids from Inventory");
 			var inventoryItems = _zohoInventoryService.GetInventoryItems(startDate,endDate);
@@ -53,7 +53,7 @@ namespace FPVenturesZohoInventorySalesOrder
 			var customerId = zohoInventoryContactsResponseModel.Contacts.Where(x => x.CustomerName == _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryCustomerName).Select(y => y.ContactId).FirstOrDefault();
 
 			logger.LogInformation("Mapping Zoho Sales order model");
-			var zohoInventoryItems = ModelMapper.MapItemsForSalesOrder(inventoryItems, taxes, customerId);
+			var zohoInventoryItems = ModelMapper.MapItemsForSalesOrder(inventoryItems, customerId);
 
 			logger.LogInformation("Adding Sales Order");
 			var ZohoInventorySalesOrderResponseModel = _zohoInventoryService.PostSalesOrdertoZohoInventory(zohoInventoryItems);

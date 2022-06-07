@@ -1,15 +1,15 @@
-﻿using FPVenturesRingbaZohoInventory.Constants;
-using FPVenturesRingbaZohoInventory.Models;
-using FPVenturesRingbaZohoInventory.Services.Interfaces;
-using FPVenturesRingbaZohoInventory.Shared;
+﻿using FPVenturesRingbaInventoryUpdateService.Constants;
+using FPVenturesRingbaInventoryUpdateService.Models;
+using FPVenturesRingbaInventoryUpdateService.Services.Interfaces;
+using FPVenturesRingbaInventoryUpdateService.Shared;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static FPVenturesRingbaZohoInventory.Shared.Enums;
+using static FPVenturesRingbaInventoryUpdateService.Shared.Enums;
 
-namespace FPVenturesRingbaZohoInventory.Services
+namespace FPVenturesRingbaInventoryUpdateService.Services
 {
     public class RingbaService : IRingbaService
 	{
@@ -157,8 +157,6 @@ namespace FPVenturesRingbaZohoInventory.Services
 					break;
 
 			} while (callLogsColumnModel.ReportStart <= endDate);
-
-
 
 			return records.Where(cl => cl.CallCompletedDt != defaultDateTime).GroupBy(p => p.InboundCallId).Select(x => x.FirstOrDefault()).ToList();
 		}

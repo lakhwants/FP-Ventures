@@ -7,8 +7,40 @@ namespace FPVenturesZohoInventorySalesOrder.Services.Mapper
 {
     public class ModelMapper
     {
-        public static ZohoInventorySalesOrderModel MapItemsForSalesOrder(List<InventoryItem> inventoryItems, ZohoInventoryTaxesModel zohoInventoryTaxesModel, string customerId)
+        public static ZohoInventorySalesOrderModel MapItemsForSalesOrder(List<InventoryItem> inventoryItems, string customerId)
         {
+            //ZohoInventorySalesOrderModel zohoInventorySalesOrderModel = new();
+            //zohoInventorySalesOrderModel.CustomerId = customerId;
+            //zohoInventorySalesOrderModel.InvoicedStatus = "invoiced";
+
+            //List<LineItem> lineItemList = new();
+
+            //var groups = inventoryItems.Where(x => x.CfCampaignName != null && x.CfCampaignName.Contains("Hawx")).GroupBy(t => new { t.CfCampaignName, t.CfTaggedState }).ToList();
+
+            //foreach (var group in groups)
+            //{
+            //    LineItem lineItem = new();
+
+            //    if (group.Key.CfTaggedState != "null")
+            //        lineItem.Name = group.Key.CfCampaignName + " " + group.Key.CfTaggedState + " Bid";
+            //    else
+            //        lineItem.Name = group.Key.CfCampaignName + " Bid";
+
+            //    var purchaseRate = group.Where(x => x.PurchaseRate != 0).FirstOrDefault();
+
+            //    if (purchaseRate == null)
+            //        continue;
+            //    else
+            //        lineItem.Rate = Convert.ToString(purchaseRate.PurchaseRate);
+
+            //    lineItem.Quantity = group.Where(x => x.PurchaseRate != 0).Count();
+
+            //    lineItemList.Add(lineItem);
+            //}
+
+            //zohoInventorySalesOrderModel.LineItems = lineItemList;
+            //return zohoInventorySalesOrderModel;
+
             ZohoInventorySalesOrderModel zohoInventorySalesOrderModel = new();
             zohoInventorySalesOrderModel.CustomerId = customerId;
             zohoInventorySalesOrderModel.InvoicedStatus = "invoiced";
@@ -21,7 +53,8 @@ namespace FPVenturesZohoInventorySalesOrder.Services.Mapper
             {
                 LineItem lineItem = new();
 
-                lineItem.Name = group.FirstOrDefault().CfCampaignName + " Bid";
+                lineItem.Name = group.Key + " Bid";
+
                 var purchaseRate = group.Where(x => x.PurchaseRate != 0).FirstOrDefault();
 
                 if (purchaseRate == null)
@@ -30,8 +63,10 @@ namespace FPVenturesZohoInventorySalesOrder.Services.Mapper
                     lineItem.Rate = Convert.ToString(purchaseRate.PurchaseRate);
 
                 lineItem.Quantity = group.Where(x => x.PurchaseRate != 0).Count();
+
                 lineItemList.Add(lineItem);
             }
+
             zohoInventorySalesOrderModel.LineItems = lineItemList;
             return zohoInventorySalesOrderModel;
         }

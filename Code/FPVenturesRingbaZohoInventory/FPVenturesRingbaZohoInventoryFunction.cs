@@ -28,7 +28,7 @@ namespace FPVenturesZohoInventory
         public async Task RunAsync([TimerTrigger("%Schedule%")] TimerInfo timerInfo, FunctionContext context)
         {
             DateTime endDate = DateTime.Now;
-            DateTime startDate = endDate.AddHours(-3);
+            DateTime startDate = endDate.AddHours(-10);
             var logger = context.GetLogger(AzureFunctionName);
 
             logger.LogInformation($"StartDate - {startDate}");
@@ -47,10 +47,12 @@ namespace FPVenturesZohoInventory
             }
             logger.LogInformation($"Call logs fetched from Ringba = {callLogs.Count}");
 
+            logger.LogInformation($"Fetching details for call logs ......");
+            var detailedCallLogs = _ringbaService.GetCallLogDetails(callLogs);
 
             logger.LogInformation("Grouping calls by publishers");
 
-            var callLogGroupsByPublishers = callLogs.GroupBy(x => x.PublisherName).ToList();
+            var callLogGroupsByPublishers = detailedCallLogs.GroupBy(x => x.PublisherName).ToList();
 
             logger.LogInformation("Fetching Item groups");
 

@@ -27,7 +27,7 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
                         new CustomField { Label = ZohoInventoryCustomFields.InboundCallID, Value = ringbaCallLog.InboundCallId },
                         new CustomField { Label = ZohoInventoryCustomFields.CallerID, Value = RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) },
                         new CustomField { Label = ZohoInventoryCustomFields.Duration, Value = Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) },
-                        new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = ringbaCallLog.TaggedCity },
+                        new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = ringbaCallLog.TaggedState },
                         new CustomField { Label = ZohoInventoryCustomFields.CallDateTime, Value = GetDateString(ringbaCallLog.CallDt) },
                         new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(Convert.ToString(ringbaCallLog.PayoutAmount)) ? Convert.ToString(ringbaCallLog.PayoutAmount) : 0.ToString() },
                         new CustomField { Label = ZohoInventoryCustomFields.DialedNumber, Value = ringbaCallLog.TaggedNumber },
@@ -49,7 +49,7 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
                         new CustomField { Label = ZohoInventoryCustomFields.WinningBidTargetID, Value = ringbaCallLog.RingTreeWinningBidTargetId },
                         new CustomField { Label = ZohoInventoryCustomFields.WinningBidTargetName, Value = ringbaCallLog.RingTreeWinningBidTargetName },
                         new CustomField { Label = ZohoInventoryCustomFields.LeadSource, Value = ringbaCallLog.PublisherName },
-                        new CustomField { Label = ZohoInventoryCustomFields.Date, Value = ringbaCallLog.CallDt.Date.ToString("yyyy-MM-dd") }
+                        new CustomField { Label = ZohoInventoryCustomFields.Date, Value = ringbaCallLog.CallDt.Date.ToString("yyyy-MM-dd") },
                     };
                     zohoInventoryModel.Name = string.IsNullOrEmpty(ringbaCallLog.TargetName) ? (string.IsNullOrEmpty(ringbaCallLog.TargetGroupName) ? ringbaCallLog.CampaignName : ringbaCallLog.TargetGroupName) : ringbaCallLog.TargetName;
                     zohoInventoryModel.ProductType = "goods";
@@ -61,11 +61,7 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
                     zohoInventoryModel.CustomFields = customFields;
                     zohoInventoryModel.PurchaseAccountName = "Cost Of Goods Sold";
                     zohoInventoryModel.IsReturnable = true;
-                    var group = zohoInventoryItemGroupsList.ItemGroups.Where(x => x.GroupName == ringbaCallLog.PublisherName).FirstOrDefault();
-                    if (group != null)
-                    {
-                        zohoInventoryModel.GroupId = zohoInventoryItemGroupsList.ItemGroups.Where(x => x.GroupName == ringbaCallLog.PublisherName).FirstOrDefault().GroupId;
-                    }
+                    zohoInventoryModel.GroupId = zohoInventoryItemGroupsList.ItemGroups.Where(x => x.GroupName == ringbaCallLog.PublisherName).FirstOrDefault().GroupId;
                     zohoInventoryModel.Rate = !string.IsNullOrEmpty(Convert.ToString(ringbaCallLog.ConversionAmount)) ? Convert.ToDouble(ringbaCallLog.ConversionAmount) : 0;
                     var vendor = zohoCRMVendorsResponseModel.Data.Where(x => x.PublisherName != null && x.PublisherName.Contains(ringbaCallLog.PublisherName)).FirstOrDefault();
                     if (vendor != null)
@@ -73,7 +69,6 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
                         zohoInventoryModel.VendorId = zohoInventoryVendorsResponseModel.Contacts.Where(x => x.ContactName == vendor.VendorName).FirstOrDefault().ContactId;
                     }
                     zohoInventoryModel.SKU = CreateSKU(ringbaCallLog, vendor);
-                //    zohoInventoryModel.SKU = "";
                     zohoInventoryRecords.Add(zohoInventoryModel);
                 }
                 zohoInventoryRecordGroups.Add(zohoInventoryRecords);
@@ -95,8 +90,8 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
 
                 List<Item> items = new();
                 Item item = new();
-                item.Name = "Demo" + counter;
-                item.SKU = "Demo" + counter;
+                item.Name = "Demo" + newItemGroup.Key;
+                item.SKU = "Demo" + newItemGroup.Key;
                 item.ProductType = "goods";
                 item.Source = "user";
                 item.Status = "active";
@@ -132,6 +127,11 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Mapper
         public static string CreateSKU(Record ringbaCallLog, VendorCRM vendor)
         {
             string ticks = Convert.ToString(ringbaCallLog.CallDt.Ticks);
+
+            if (vendor == null)
+            {
+                return "NA" + "_" + RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) + "_" + ticks + "_" + Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) + "_" + ringbaCallLog.TaggedState;
+            }
 
             return vendor.VendorAbbreviation + "_" + RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) + "_" + ticks + "_" + Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) + "_" + ringbaCallLog.TaggedState;
         }
