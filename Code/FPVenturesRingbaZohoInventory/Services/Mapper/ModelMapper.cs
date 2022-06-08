@@ -27,7 +27,7 @@ namespace FPVenturesRingbaZohoInventory.Services.Mapper
                         new CustomField { Label = ZohoInventoryCustomFields.InboundCallID, Value = ringbaCallLog.InboundCallId },
                         new CustomField { Label = ZohoInventoryCustomFields.CallerID, Value = RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) },
                         new CustomField { Label = ZohoInventoryCustomFields.Duration, Value = Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) },
-                        new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = ringbaCallLog.TaggedCity },
+                        new CustomField { Label = ZohoInventoryCustomFields.TaggedState, Value = ringbaCallLog.TaggedState },
                         new CustomField { Label = ZohoInventoryCustomFields.CallDateTime, Value = GetDateString(ringbaCallLog.CallDt) },
                         new CustomField { Label = ZohoInventoryCustomFields.Payout, Value = !string.IsNullOrEmpty(Convert.ToString(ringbaCallLog.PayoutAmount)) ? Convert.ToString(ringbaCallLog.PayoutAmount) : 0.ToString() },
                         new CustomField { Label = ZohoInventoryCustomFields.DialedNumber, Value = ringbaCallLog.TaggedNumber },

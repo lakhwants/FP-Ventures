@@ -1,7 +1,7 @@
-﻿using FPVenturesRingbaZohoInventory.Services;
-using FPVenturesRingbaZohoInventoryService.Models;
-using FPVenturesRingbaZohoInventoryService.Services.Interfaces;
-using FPVenturesRingbaZohoInventoryService.Services.Mapper;
+﻿using FPVenturesRingbaInventoryUpdateService.Models;
+using FPVenturesRingbaInventoryUpdateService.Services;
+using FPVenturesRingbaInventoryUpdateService.Services.Interfaces;
+using FPVenturesRingbaInventoryUpdateService.Services.Mapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace FPVenturesRingbaZohoInventoryService
+
+namespace FPVenturesRingbaInventoryUpdateService
 {
     class Program
     {
@@ -17,11 +18,11 @@ namespace FPVenturesRingbaZohoInventoryService
         static void Main(string[] args)
         {
 
-             Configuration = new ConfigurationBuilder().
-                SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-            .AddJsonFile("local.settings.json", false)
-            .Build();
-           
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddJsonFile("local.settings.json", false)
+                .Build();
+
             RingbaZohoConfigurationSettings ringbaZohoConfigurationSettings = GetConfigurationSettings();
 
             var serviceProvider = new ServiceCollection()
@@ -32,61 +33,30 @@ namespace FPVenturesRingbaZohoInventoryService
                                   .BuildServiceProvider();
 
 
-            var s= Configuration.GetSection("RingbaAccessToken").Value;
-
-            var _ringbaService=serviceProvider.GetService<IRingbaService>();
+            var _ringbaService = serviceProvider.GetService<IRingbaService>();
             var _zohoInventoryService = serviceProvider.GetService<IZohoInventoryService>();
             var _zohoLeadsService = serviceProvider.GetService<IZohoLeadsService>();
 
-            DateTime endDate = new DateTime(2022,5,4).AddDays(-50);
-            DateTime startDate = endDate.AddDays(-7);
+            DateTime startDate = new DateTime(2022, 5, 1);
+            DateTime endDate = startDate.AddDays(7);
 
             List<Record> callLogs;
             callLogs = _ringbaService.GetCallLogs(startDate, endDate);
 
             var detailedCallLogs = _ringbaService.GetCallLogDetails(callLogs);
 
-            var callLogGroupsByPublishers = detailedCallLogs.GroupBy(x => x.PublisherName).ToList();
+            var vendors = _zohoLeadsService.GetVendors();
+            var ringbaCalls = ModelMapper.CreateSKUForCallLogs(detailedCallLogs,vendors);
+
+            var inventoryItems = _zohoInventoryService.GetInventoryItems(startDate,endDate);
+
+            var itemsToUpdate = ModelMapper.MapRingbaCallsToZohoInventoryItems(ringbaCalls, inventoryItems, vendors);
+
+            var reponse = _zohoInventoryService.PutLeadsToZohoInventory(itemsToUpdate);
 
 
-            var itemGroupList = _zohoInventoryService.GetItemGroupsList();
 
 
-            var groupsToAdd = callLogGroupsByPublishers.Where(x => !itemGroupList.ItemGroups.Any(y => y.GroupName == x.Key)).ToList();
-
-
-            var newGroups = ModelMapper.MapNewItemGroups(groupsToAdd);
-
-            var addedGroups = _zohoInventoryService.CreateItemGroups(newGroups);
-
-            var vendorsCRM = _zohoLeadsService.GetVendors();
-
-
-            var vendorInventory = _zohoInventoryService.GetVendors();
-
-
-            var inventoryItems = ModelMapper.MapRingbaCallsToZohoInventoryItems(callLogGroupsByPublishers, _zohoInventoryService.GetItemGroupsList(), vendorInventory, vendorsCRM);
-
-
-            var zohoInventoryResponseModel = _zohoInventoryService.AddLeadsToZohoInventory(inventoryItems);
-
-            _zohoInventoryService.DeleteItem(addedGroups);
-        }
-
-        private static void ConfigureServices(IServiceCollection serviceCollection)
-        {
-
-            // Build configuration
-            var config = new ConfigurationBuilder().
-                SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-            .AddJsonFile("local.settings.json", false)
-            .Build();
-
-            // Add access to generic IConfigurationRoot
-            serviceCollection.AddSingleton<IConfigurationRoot>(config);
-
-            // Add app
-           // serviceCollection.AddTransient<App>();
         }
 
         private static RingbaZohoConfigurationSettings GetConfigurationSettings()

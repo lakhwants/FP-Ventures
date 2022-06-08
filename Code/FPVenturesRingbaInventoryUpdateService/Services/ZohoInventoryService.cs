@@ -1,13 +1,14 @@
-﻿using FPVenturesRingbaZohoInventoryService.Models;
-using FPVenturesRingbaZohoInventoryService.Services.Interfaces;
-using FPVenturesRingbaZohoInventoryService.Shared;
+﻿using FPVenturesRingbaInventoryUpdateService.Models;
+using FPVenturesRingbaInventoryUpdateService.Services.Interfaces;
+using FPVenturesRingbaInventoryUpdateService.Shared;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace FPVenturesRingbaZohoInventory.Services
+namespace FPVenturesRingbaInventoryUpdateService.Services
 {
     public class ZohoInventoryService : IZohoInventoryService
     {
@@ -35,54 +36,52 @@ namespace FPVenturesRingbaZohoInventory.Services
             return response.Data.AccessToken;
         }
 
-        public List<ZohoInventoryResponseModel> AddLeadsToZohoInventory(List<List<ZohoInventoryModel>> zohoInventoryModelGroups)
+        public List<ZohoInventoryResponseModel> PutLeadsToZohoInventory(List<ZohoInventoryModel> ZohoInventoryModels)
         {
             List<ZohoInventoryResponseModel> zohoInventoryResponseModel = new();
             ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-            var client = new RestClient(_ringbaZohoConfigurationSettings.ZohoInventoryBaseUrl + _ringbaZohoConfigurationSettings.ZohoInventoryAddItemPath);
 
             IRestResponse<ZohoInventoryResponseModel> response;
-            foreach (var zohoInventoryModelGroup in zohoInventoryModelGroups)
+
+            var batches = Utility.BuildBatches<ZohoInventoryModel>(ZohoInventoryModels, 90);
+
+            foreach (var batch in batches)
             {
-
-                var batches = Utility.BuildBatches<ZohoInventoryModel>(zohoInventoryModelGroup, 90);
-                foreach (var batch in batches)
+                foreach (var item in batch)
                 {
-                    foreach (var zohoInventoryModel in batch)
+
+                    var client = new RestClient(String.Format("https://inventory.zoho.com/api/v1/items/{0}", item.ItemId));
+                    var request = new RestRequest(Method.PUT);
+                    request.AddHeader("Content-Type", "text/plain");
+                    request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+
+                    var body = JsonConvert.SerializeObject(item);
+                    request.AddParameter("text/plain", body, ParameterType.RequestBody);
+                    request.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
+                    response = client.Execute<ZohoInventoryResponseModel>(request);
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        var request = new RestRequest(Method.POST);
-                        request.AddHeader("Content-Type", "text/plain");
-                        request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                        ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+                        var retryRequest = new RestRequest(Method.PUT);
+                        retryRequest.AddHeader("Content-Type", "text/plain");
+                        retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
 
-                        var body = JsonConvert.SerializeObject(zohoInventoryModel);
-                        request.AddParameter("text/plain", body, ParameterType.RequestBody);
-                        request.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
-                        response = client.Execute<ZohoInventoryResponseModel>(request);
-
-                        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                        {
-                            ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
-                            var retryRequest = new RestRequest(Method.POST);
-                            retryRequest.AddHeader("Content-Type", "text/plain");
-                            retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-
-                            retryRequest.AddParameter("text/plain", body, ParameterType.RequestBody);
-                            retryRequest.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
-                            response = client.Execute<ZohoInventoryResponseModel>(retryRequest);
-                        }
-
-                        if (response.Data.Code == 43)
-                        {
-                            return null;
-                        }
-
-                        zohoInventoryResponseModel.Add(response.Data);
+                        retryRequest.AddParameter("text/plain", body, ParameterType.RequestBody);
+                        retryRequest.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
+                        response = client.Execute<ZohoInventoryResponseModel>(retryRequest);
                     }
 
-                    Thread.Sleep(2 * 1000);
-                }
-            }
+                    if (response.Data.Code == 43)
+                    {
+                        return null;
+                    }
 
+                    zohoInventoryResponseModel.Add(response.Data);
+                }
+
+                Thread.Sleep(2 * 1000);
+            }
             return zohoInventoryResponseModel;
         }
 
@@ -116,6 +115,36 @@ namespace FPVenturesRingbaZohoInventory.Services
             zohoInventoryItemGroupsListResponseModel.ItemGroups = itemGroup;
 
             return zohoInventoryItemGroupsListResponseModel;
+        }
+
+        public List<InventoryItem> GetInventoryItems(DateTime startDate, DateTime endDate)
+        {
+            List<InventoryItem> inventoryItems = new();
+            int page = 1;
+            IRestResponse<ZohoInventoryItemModel> response;
+            ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
+
+            var client = new RestClient("https://inventory.zoho.com/api/v1/items");
+            do
+            {
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                request.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
+                request.AddParameter("page", page);
+                //request.AddParameter("custom_field_2762310000006617897_start", startDate.ToString("yyyy-MM-dd"));
+                //request.AddParameter("custom_field_2762310000006617897_end", endDate.ToString("yyyy-MM-dd"));
+                response = client.Execute<ZohoInventoryItemModel>(request);
+
+                if (response != null || response.Data != null || response.Data.Items.Any())
+                    inventoryItems.AddRange(response.Data.Items);
+
+                if (response.Data.page_context.HasMorePage)
+                    page++;
+
+            } while (response.Data.page_context.HasMorePage);
+
+
+            return inventoryItems;
         }
 
         public List<ZohoInventoryItemGroupReponseModel> CreateItemGroups(List<ZohoInventoryPostItemGroupRequestModel> newGroups)
@@ -164,7 +193,7 @@ namespace FPVenturesRingbaZohoInventory.Services
             IRestResponse<ZohoInventoryVendorsResponseModel> response;
             int page = 1;
             ZohoInventoryVendorsResponseModel zohoInventoryItemGroupsListResponseModel = new();
-            List<VendorInventory> contacts= new();
+            List<VendorInventory> contacts = new();
 
             do
             {

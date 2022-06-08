@@ -45,7 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeleteUnAnsweredDisposition
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesRingbaZohoInventory", "FPVenturesRingbaZohoInventory\FPVenturesRingbaZohoInventory.csproj", "{04C339AE-047E-4121-B520-BF13095049C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPVenturesRingbaZohoInventoryService", "FPVenturesRingbaZohoInventoryService\FPVenturesRingbaZohoInventoryService.csproj", "{49B6E285-C513-4A6D-A349-65EC44400535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesRingbaZohoInventoryService", "FPVenturesRingbaZohoInventoryService\FPVenturesRingbaZohoInventoryService.csproj", "{49B6E285-C513-4A6D-A349-65EC44400535}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesZohoInventoryVendorCredits", "FPVenturesZohoInventoryVendorCredits\FPVenturesZohoInventoryVendorCredits.csproj", "{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPVenturesRingbaInventoryUpdateService", "FPVenturesRingbaInventoryUpdateService\FPVenturesRingbaInventoryUpdateService.csproj", "{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,14 @@ Global
 		{49B6E285-C513-4A6D-A349-65EC44400535}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B6E285-C513-4A6D-A349-65EC44400535}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49B6E285-C513-4A6D-A349-65EC44400535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
