@@ -49,7 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesRingbaZohoInvento
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesZohoInventoryVendorCredits", "FPVenturesZohoInventoryVendorCredits\FPVenturesZohoInventoryVendorCredits.csproj", "{CC0079B0-60AF-4BEA-9A6F-56C119EB9875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPVenturesRingbaInventoryUpdateService", "FPVenturesRingbaInventoryUpdateService\FPVenturesRingbaInventoryUpdateService.csproj", "{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesRingbaInventoryUpdateService", "FPVenturesRingbaInventoryUpdateService\FPVenturesRingbaInventoryUpdateService.csproj", "{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPVenturesFive9InventoryDisposition", "FPVenturesFive9InventoryDisposition\FPVenturesFive9InventoryDisposition.csproj", "{361C5100-DB2B-468F-A19F-9F5945FDF131}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,10 @@ Global
 		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B8E0B91-73ED-49A5-A10E-6ECC46F00E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361C5100-DB2B-468F-A19F-9F5945FDF131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361C5100-DB2B-468F-A19F-9F5945FDF131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361C5100-DB2B-468F-A19F-9F5945FDF131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361C5100-DB2B-468F-A19F-9F5945FDF131}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

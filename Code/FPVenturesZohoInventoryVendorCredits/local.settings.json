@@ -1,7 +1,26 @@
 {
-    "IsEncrypted": false,
-    "Values": {
-        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
-    }
+  "IsEncrypted": false,
+  "Values": {
+
+    "VendorCreditsSchedule": "0 */1 * * * *",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+
+    "ZohoCRMBaseUrl": "https://www.zohoapis.com/crm/v2/",
+    "ZohoAccessTokenFromRefreshTokenPath": "https://accounts.zoho.com/oauth/v2/token?refresh_token={0}&client_id={1}&client_secret={2}&grant_type=refresh_token",
+    "ZohoCRMVendorsPath": "Vendors",
+    "ZohoCOQLPath": "coql",
+
+    "ZohoInventoryBaseUrl": "https://inventory.zoho.com/api/v1/",
+    "ZohoInventoryOrganizationId": "758026604",
+    "ZohoInventoryVendorsPath": "vendors",
+
+    "ZohoClientId": "1000.KGAQ5OHG3RREM70F468UA2MI7NXTCK",
+    "ZohoClientSecret": "16a37f8f68fb2bfe6a7eb4fa88177184a40c9adbb5",
+
+    "ZohoInventoryRefreshToken": "1000.a61d7310ce4d29554916cba0656c16f4.44b4a6015c910cd888d1b7656395d02f",
+    "ZohoCRMRefreshToken": "1000.3022959d47d1a763b20418547dfc858d.0477c63799d714855b82eca55a0c9550",
+
+    "DispositionCOQLQuery": "select id,ANI ,Timestamp, Disposition from Dispositions where  (Disposition like '%DNOS%') and Timestamp between '{0}' and '{1}' Order by Timestamp ASC"
+  }
 }
