@@ -13,12 +13,12 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
     public class ZohoLeadsService : IZohoLeadsService
     {
         public string ZohoAccessToken = string.Empty;
-        public ZohoCRMAndInventoryConfigurationSettings _ringbaZohoConfigurationSettings;
+        public ZohoCRMAndInventoryConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
         private IRestResponse<ZohoCRMDispositionResponseModel> response;
 
-        public ZohoLeadsService(ZohoCRMAndInventoryConfigurationSettings ringbaZohoConfigurationSettings)
+        public ZohoLeadsService(ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings)
         {
-            _ringbaZohoConfigurationSettings = ringbaZohoConfigurationSettings;
+            _zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfigurationSettings;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
         /// <returns></returns>
         private string GetZohoAccessTokenFromRefreshToken()
         {
-            var client = new RestClient(string.Format(_ringbaZohoConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, _ringbaZohoConfigurationSettings.ZohoCRMRefreshToken, _ringbaZohoConfigurationSettings.ZohoClientId, _ringbaZohoConfigurationSettings.ZohoClientSecret))
+            var client = new RestClient(string.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, _zohoCRMAndInventoryConfigurationSettings.ZohoCRMRefreshToken, _zohoCRMAndInventoryConfigurationSettings.ZohoClientId, _zohoCRMAndInventoryConfigurationSettings.ZohoClientSecret))
             {
                 Timeout = -1
             };
@@ -51,7 +51,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             do
             {
 
-                var client = new RestClient(_ringbaZohoConfigurationSettings.ZohoCRMBaseUrl + _ringbaZohoConfigurationSettings.ZohoCRMVendorsPath);
+                var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
                 client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
@@ -60,7 +60,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    var retryClient = new RestClient(_ringbaZohoConfigurationSettings.ZohoCRMBaseUrl + _ringbaZohoConfigurationSettings.ZohoCRMVendorsPath);
+                    var retryClient = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
                     var retryRequest = new RestRequest(Method.GET);
                     retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                     retryRequest.AddParameter("page", page);
@@ -95,9 +95,9 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             {
                 do
                 {
-                    zohoCOQLModel.Query = string.Format(_ringbaZohoConfigurationSettings.DispositionCOQLQuery, ModelMapper.GetDateString(startDate), ModelMapper.GetDateString(endDate));
+                    zohoCOQLModel.Query = string.Format(_zohoCRMAndInventoryConfigurationSettings.DispositionCOQLQuery, ModelMapper.GetDateString(startDate), ModelMapper.GetDateString(endDate));
 
-                    var client = new RestClient(_ringbaZohoConfigurationSettings.ZohoCRMBaseUrl + _ringbaZohoConfigurationSettings.ZohoCOQLPath);
+                    var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCOQLPath);
                     client.Timeout = -1;
                     var request = new RestRequest(Method.POST);
                     request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
@@ -108,7 +108,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
 
                     if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        var retryClient = new RestClient(_ringbaZohoConfigurationSettings.ZohoCRMBaseUrl + _ringbaZohoConfigurationSettings.ZohoCRMVendorsPath);
+                        var retryClient = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
                         var retryRequest = new RestRequest(Method.GET);
                         retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                         response = retryClient.Execute<ZohoCRMDispositionResponseModel>(request);
