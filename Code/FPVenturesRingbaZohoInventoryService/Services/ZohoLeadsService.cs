@@ -54,11 +54,12 @@ namespace FPVenturesRingbaZohoInventory.Services
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
+                    ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
                     var retryClient = new RestClient(_ringbaZohoConfigurationSettings.ZohoCRMBaseUrl + _ringbaZohoConfigurationSettings.ZohoCRMVendorsPath);
                     var retryRequest = new RestRequest(Method.GET);
                     retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                     retryRequest.AddParameter("page", page);
-                    response = retryClient.Execute<ZohoCRMVendorsResponseModel>(request);
+                    response = retryClient.Execute<ZohoCRMVendorsResponseModel>(retryRequest);
                 }
 
                 if (response.Data.Info.MoreRecords)

@@ -70,7 +70,10 @@ namespace FPVenturesRingbaZohoInventory.Services
                             retryRequest.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
                             response = client.Execute<ZohoInventoryResponseModel>(retryRequest);
                         }
-
+                        if (response.StatusCode == 0)
+                        {
+                            response = client.Execute<ZohoInventoryResponseModel>(request);
+                        }
                         if (response.Data.Code == 43)
                         {
                             return null;

@@ -11,11 +11,11 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
     public class ZohoInventoryService : IZohoInventoryService
     {
         public string ZohoAccessToken = string.Empty;
-        public ZohoCRMAndInventoryConfigurationSettings _ringbaZohoConfigurationSettings;
+        public ZohoCRMAndInventoryConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
 
-        public ZohoInventoryService(ZohoCRMAndInventoryConfigurationSettings ringbaZohoConfigurationSettings)
+        public ZohoInventoryService(ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings)
         {
-            _ringbaZohoConfigurationSettings = ringbaZohoConfigurationSettings;
+            _zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfigurationSettings;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
         /// <returns></returns>
         private string GetZohoAccessTokenFromRefreshToken()
         {
-            var client = new RestClient(string.Format(_ringbaZohoConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, _ringbaZohoConfigurationSettings.ZohoInventoryRefreshToken, _ringbaZohoConfigurationSettings.ZohoClientId, _ringbaZohoConfigurationSettings.ZohoClientSecret));
+            var client = new RestClient(string.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryRefreshToken, _zohoCRMAndInventoryConfigurationSettings.ZohoClientId, _zohoCRMAndInventoryConfigurationSettings.ZohoClientSecret));
             var request = new RestRequest(Method.POST);
             var response = client.Execute<ZohoAccessTokenModel>(request);
 
@@ -47,7 +47,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             {
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                request.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
+                request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
                 request.AddParameter("page", page);
                 request.AddParameter("custom_field_2762310000006617897_start", startDate.ToString("yyyy-MM-dd"));
                 request.AddParameter("custom_field_2762310000006617897_end", endDate.ToString("yyyy-MM-dd"));
@@ -99,10 +99,10 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
 
             do
             {
-                var client = new RestClient(_ringbaZohoConfigurationSettings.ZohoInventoryBaseUrl + _ringbaZohoConfigurationSettings.ZohoInventoryVendorsPath);
+                var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryVendorsPath);
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                request.AddParameter("organization_id", _ringbaZohoConfigurationSettings.ZohoInventoryOrganizationId);
+                request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
                 request.AddParameter("filter_by", "Status.CrmVendors");
                 request.AddParameter("page", page);
                 response = client.Execute<ZohoInventoryVendorsResponseModel>(request);

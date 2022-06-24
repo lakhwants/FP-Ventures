@@ -38,8 +38,12 @@ namespace FPVenturesRingbaZohoInventoryService
             var _zohoInventoryService = serviceProvider.GetService<IZohoInventoryService>();
             var _zohoLeadsService = serviceProvider.GetService<IZohoLeadsService>();
 
-            DateTime endDate = new DateTime(2022,5,4).AddDays(-50);
-            DateTime startDate = endDate.AddDays(-7);
+            //DateTime endDate = new DateTime(2021, 12, 2);
+            //DateTime startDate = endDate.AddDays(-10);
+            DateTime endDate = new DateTime(2022, 6, 3);
+            DateTime startDate = endDate.AddDays(-2);
+
+
 
             List<Record> callLogs;
             callLogs = _ringbaService.GetCallLogs(startDate, endDate);
@@ -71,22 +75,6 @@ namespace FPVenturesRingbaZohoInventoryService
             var zohoInventoryResponseModel = _zohoInventoryService.AddLeadsToZohoInventory(inventoryItems);
 
             _zohoInventoryService.DeleteItem(addedGroups);
-        }
-
-        private static void ConfigureServices(IServiceCollection serviceCollection)
-        {
-
-            // Build configuration
-            var config = new ConfigurationBuilder().
-                SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-            .AddJsonFile("local.settings.json", false)
-            .Build();
-
-            // Add access to generic IConfigurationRoot
-            serviceCollection.AddSingleton<IConfigurationRoot>(config);
-
-            // Add app
-           // serviceCollection.AddTransient<App>();
         }
 
         private static RingbaZohoConfigurationSettings GetConfigurationSettings()
