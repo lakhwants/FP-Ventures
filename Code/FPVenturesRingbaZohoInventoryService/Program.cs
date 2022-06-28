@@ -40,8 +40,8 @@ namespace FPVenturesRingbaZohoInventoryService
 
             //DateTime endDate = new DateTime(2021, 12, 2);
             //DateTime startDate = endDate.AddDays(-10);
-            DateTime endDate = new DateTime(2022, 6, 3);
-            DateTime startDate = endDate.AddDays(-2);
+            DateTime endDate = new DateTime(2022, 6, 25);
+            DateTime startDate = endDate.AddDays(-1);
 
 
 
