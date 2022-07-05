@@ -8,40 +8,6 @@ namespace FPVenturesFive9Disposition.Services.Mapper
 {
 	public class ModelMapper
 	{
-		//public static ZohoLeadsModel MapSubformsToZohoLeads(ZohoLeadsModel subForms, List<Five9Model> five9Models)
-		//{
-		//	ZohoLeadsModel zohoLeadsModel = new();
-		//	foreach (var subForm in subForms.Data)
-		//	{
-		//		List<Five9Calls> subFormsToadd = new();
-
-		//		var zohoLeadsDispositions = five9Models.Where(x => x.ANI == subForm.CallerID);
-
-		//		foreach (var zohoLeadsDisposition in zohoLeadsDispositions)
-		//		{
-
-		//			if (subForm.Five9_Calls.Any(x => x.Agent_Email == zohoLeadsDisposition.Agent
-		//			&& x.Agent_Name == zohoLeadsDisposition.AgentName &&
-		//			x.Call_Time == zohoLeadsDisposition.CallTime &&
-		//			x.Disposition == zohoLeadsDisposition.Disposition &&
-		//			x.Time_Stamp == zohoLeadsDisposition.Timestamp))
-		//				continue;
-
-		//			Five9Calls five9Calls = new();
-		//			five9Calls.Agent_Email = zohoLeadsDisposition.Agent;
-		//			five9Calls.Agent_Name = zohoLeadsDisposition.AgentName;
-		//			five9Calls.Call_Time = zohoLeadsDisposition.CallTime;
-		//			five9Calls.Customer_Name = zohoLeadsDisposition.CustomerName;
-		//			five9Calls.Disposition = zohoLeadsDisposition.Disposition;
-		//			five9Calls.Time_Stamp = zohoLeadsDisposition.Timestamp;
-
-		//			subForm.Five9_Calls.Add(five9Calls);
-		//		}
-
-		//	}
-
-		//	return subForms;
-		//}
 
 		public static ZohoCallDispositionErrorModel MapCallDispostionsToCallDispostionsErrorModel(CallDispositionRecordModel errorModel)
 		{

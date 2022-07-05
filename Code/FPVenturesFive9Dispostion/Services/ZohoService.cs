@@ -39,6 +39,9 @@ namespace FPVenturesFive9Disposition.Services
 				var lastRecord = batch.LastOrDefault();
 				foreach (var fields in batch)
 				{
+					if (string.IsNullOrEmpty(fields.ANI))
+						continue;
+
 					criteriaString += string.Format(SearchCriteria, fields.ANI);
 
 					if (lastRecord.ANI != fields.ANI)
@@ -150,9 +153,10 @@ namespace FPVenturesFive9Disposition.Services
 					requestRetry.AddParameter("text/plain", body, ParameterType.RequestBody);
 					response = client.Execute<ZohoResponseModel>(request);
 				}
-				CreateErrorSuccessModels(errorData, batch, response);
 
 				data.AddRange(response.Data.Data.Where(x => x.Status == Enums.Status.success.ToString()));
+
+				CreateErrorSuccessModels(errorData, batch, response);
 			}
 
 			return (data, errorData);

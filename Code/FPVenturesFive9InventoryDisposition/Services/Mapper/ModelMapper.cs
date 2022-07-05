@@ -143,15 +143,13 @@ namespace FPVenturesFive9InventoryDisposition.Services.Mapper
 
 				if (inventoryItems.Any(x => x.CfCallerId == five9Model.ANI))
 				{
-					callDispositionModelRecord.LeadRecordID = inventoryItems.Any(x => x.CfCallerId == five9Model.ANI) ? inventoryItems.Where(x => x.CfCallerId == five9Model.ANI).FirstOrDefault().ItemId : null;
-					callDispositionModelRecord.LeadID = inventoryItems.Any(x => x.CfCallerId == five9Model.ANI) ? inventoryItems.Where(x => x.CfCallerId == five9Model.ANI).FirstOrDefault().ItemId : null;
+					callDispositionModelRecord.ItemID = inventoryItems.Any(x => x.CfCallerId == five9Model.ANI) ? inventoryItems.Where(x => x.CfCallerId == five9Model.ANI).FirstOrDefault().ItemId : null;
 					callDispositionModelRecord.RingbaOrUnbounce = "Ringba";
 					callDispositionRecordModels.Add(callDispositionModelRecord);
 				}
 				else if (inventoryItems.Any(x => x.CfPhone== five9Model.DNIS))
 				{
-					callDispositionModelRecord.LeadRecordID = inventoryItems.Any(x => x.CfPhone == five9Model.DNIS) ? inventoryItems.Where(x => x.CfPhone == five9Model.DNIS).FirstOrDefault().ItemId : null;
-					callDispositionModelRecord.LeadID = inventoryItems.Any(x => x.CfPhone == five9Model.DNIS) ? inventoryItems.Where(x => x.CfPhone == five9Model.DNIS).FirstOrDefault().ItemId : null;
+					callDispositionModelRecord.ItemID = inventoryItems.Any(x => x.CfPhone == five9Model.DNIS) ? inventoryItems.Where(x => x.CfPhone == five9Model.DNIS).FirstOrDefault().ItemId : null;
 					callDispositionModelRecord.RingbaOrUnbounce = "Web Lead";
 					callDispositionRecordModels.Add(callDispositionModelRecord);
 				}

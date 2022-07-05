@@ -43,7 +43,8 @@ namespace FPVenturesFive9Dispostion
 				ZohoRefreshToken = Environment.GetEnvironmentVariable("ZohoRefreshToken") ?? string.Empty,
 				Five9BaseUrl=Environment.GetEnvironmentVariable("Five9BaseUrl") ?? string.Empty,
 				Five9ServiceNamespace=Environment.GetEnvironmentVariable("Five9ServiceNamespace") ?? string.Empty,
-				Five9MethodAction=Environment.GetEnvironmentVariable("Five9MethodAction") ?? string.Empty
+				Five9MethodAction=Environment.GetEnvironmentVariable("Five9MethodAction") ?? string.Empty,
+				Five9BasicAuthenticationToken = Environment.GetEnvironmentVariable("Five9BasicAuthenticationToken") ?? string.Empty
 			};
 		}
 	}

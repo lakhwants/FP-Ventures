@@ -19,7 +19,8 @@
 
 		"Five9BaseUrl": "https://api.five9.com/wsadmin/v4/AdminWebService",
 		"Five9ServiceNamespace": "http://service.admin.ws.five9.com/",
-		"Five9MethodAction": ""
+		"Five9MethodAction": "",
+		"Five9BasicAuthenticationToken": "TGFraHdhbnQgU2luZ2g6U3lzdGVtc0AxMjM="
 	}
 
 }

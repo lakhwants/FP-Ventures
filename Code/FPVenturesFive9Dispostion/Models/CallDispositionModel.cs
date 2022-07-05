@@ -15,7 +15,9 @@ namespace FPVenturesFive9Disposition.Models
 		[JsonProperty("LeadRecord_ID")]
 		public string LeadRecordID { get; set; }
 
-		[JsonProperty("Ringba_or_Unbounce")]
+        public string ItemID { get; set; }
+
+        [JsonProperty("Ringba_or_Unbounce")]
 		public string RingbaOrUnbounce { get; set; }
 
 		[JsonProperty("Name")]

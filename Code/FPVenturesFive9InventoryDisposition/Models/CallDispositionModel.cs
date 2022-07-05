@@ -17,6 +17,8 @@ namespace FPVenturesFive9InventoryDisposition.Models
 
 		[JsonProperty("Ringba_or_Unbounce")]
 		public string RingbaOrUnbounce { get; set; }
+		
+		public string ItemID { get; set; }
 
 		[JsonProperty("Name")]
 		public string CustomerNumber { get; set; }

@@ -13,5 +13,6 @@
 		public string Five9BaseUrl { get; set; }
 		public string Five9ServiceNamespace { get; set; }
 		public string Five9MethodAction { get; set; }
+		public string Five9BasicAuthenticationToken { get; set; }
 	}
 }
