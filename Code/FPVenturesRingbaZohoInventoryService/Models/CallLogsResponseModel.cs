@@ -129,7 +129,6 @@ namespace FPVenturesRingbaZohoInventoryService.Models
         [JsonProperty("hasPayout")]
 		public bool HasPayout { get; set; }
 
-
 		public string IBNIsPhoneNumberValid { get; set; }       
 		public string TaggedNumber { get; set; }
 		public string TaggedState { get; set; }
@@ -139,6 +138,7 @@ namespace FPVenturesRingbaZohoInventoryService.Models
         public string TaggedCity { get; set; }
         public string TaggedTimeZone { get; set; }
         public string TaggedSRC { get; set; }
+        public string SKU { get; set; }
     }
 
     public class Report

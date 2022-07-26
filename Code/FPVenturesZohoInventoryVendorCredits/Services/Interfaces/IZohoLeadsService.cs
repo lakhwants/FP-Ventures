@@ -7,7 +7,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services.Interfaces
 {
     public interface IZohoLeadsService
 	{
-		public ZohoCRMVendorsResponseModel GetVendors();
+		public ZohoCRMVendorsResponseModel GetVendors(ILogger logger);
 		public List<DispositionModel> GetZohoDispositions(DateTime startDate, DateTime endDate, ILogger logger);
 	}
 }

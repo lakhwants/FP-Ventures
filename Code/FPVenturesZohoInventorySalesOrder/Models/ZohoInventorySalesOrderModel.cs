@@ -24,6 +24,10 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 
 	public class ZohoInventorySalesOrderModel
 	{
+		
+
+		[JsonProperty("custom_fields")]
+		public List<CustomField> CustomFields { get; set; }
 
 		[JsonProperty("invoiced_status")]
         public string InvoicedStatus { get; set; }

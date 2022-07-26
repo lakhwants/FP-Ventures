@@ -5,6 +5,13 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 {
 	public class Salesorder
 	{
+		[JsonProperty("cf_start_date")]
+		public string cfStartDate { get; set; }
+
+		[JsonProperty("cf_end_date")]
+
+		public string cfEndDate { get; set; }
+
 		public string salesorder_id { get; set; }
 
 		[JsonProperty("salesorder_number")]

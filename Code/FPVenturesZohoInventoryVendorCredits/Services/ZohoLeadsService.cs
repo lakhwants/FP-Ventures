@@ -1,4 +1,5 @@
-﻿using FPVenturesZohoInventoryVendorCredits.Models;
+﻿using FPVenturesZohoInventoryVendorCredits.Constants;
+using FPVenturesZohoInventoryVendorCredits.Models;
 using FPVenturesZohoInventoryVendorCredits.Services.Interfaces;
 using FPVenturesZohoInventoryVendorCredits.Services.Mapper;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace FPVenturesZohoInventoryVendorCredits.Services
@@ -13,12 +15,12 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
     public class ZohoLeadsService : IZohoLeadsService
     {
         public string ZohoAccessToken = string.Empty;
-        public ZohoCRMAndInventoryConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
+        public ConfigurationSettings _configurationSettings;
         private IRestResponse<ZohoCRMDispositionResponseModel> response;
 
-        public ZohoLeadsService(ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings)
+        public ZohoLeadsService(ConfigurationSettings configurationSettings)
         {
-            _zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfigurationSettings;
+            _configurationSettings = configurationSettings;
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
         /// <returns></returns>
         private string GetZohoAccessTokenFromRefreshToken()
         {
-            var client = new RestClient(string.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoAccessTokenFromRefreshTokenPath, _zohoCRMAndInventoryConfigurationSettings.ZohoCRMRefreshToken, _zohoCRMAndInventoryConfigurationSettings.ZohoClientId, _zohoCRMAndInventoryConfigurationSettings.ZohoClientSecret))
+            var client = new RestClient(string.Format(_configurationSettings.ZohoAccessTokenFromRefreshTokenPath, _configurationSettings.ZohoCRMRefreshToken, _configurationSettings.ZohoClientId, _configurationSettings.ZohoClientSecret))
             {
                 Timeout = -1
             };
@@ -40,7 +42,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             return response.Data.AccessToken;
         }
 
-        public ZohoCRMVendorsResponseModel GetVendors()
+        public ZohoCRMVendorsResponseModel GetVendors(ILogger logger)
         {
             ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
             IRestResponse<ZohoCRMVendorsResponseModel> response;
@@ -48,33 +50,42 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             ZohoCRMVendorsResponseModel zohoCRMVendorsResponseModel = new();
             List<VendorCRM> vendors = new();
 
-            do
+            try
             {
-
-                var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.GET);
-                request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                request.AddParameter("page", page);
-                response = client.Execute<ZohoCRMVendorsResponseModel>(request);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                do
                 {
-                    var retryClient = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
-                    var retryRequest = new RestRequest(Method.GET);
-                    retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                    retryRequest.AddParameter("page", page);
-                    response = retryClient.Execute<ZohoCRMVendorsResponseModel>(request);
-                }
 
-                if (response.Data.Info.MoreRecords)
-                {
-                    page++;
-                }
+                    var client = new RestClient(_configurationSettings.ZohoCRMBaseUrl + _configurationSettings.ZohoCRMVendorsPath);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.GET);
+                    request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                    request.AddParameter("page", page);
+                    response = client.Execute<ZohoCRMVendorsResponseModel>(request);
 
-                vendors.AddRange(response.Data.Data);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        var retryClient = new RestClient(_configurationSettings.ZohoCRMBaseUrl + _configurationSettings.ZohoCRMVendorsPath);
+                        var retryRequest = new RestRequest(Method.GET);
+                        retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                        retryRequest.AddParameter("page", page);
+                        response = retryClient.Execute<ZohoCRMVendorsResponseModel>(request);
+                    }
 
-            } while (response.Data.Info.MoreRecords);
+                    if (response.Data.Info.MoreRecords)
+                    {
+                        page++;
+                    }
+
+                    vendors.AddRange(response.Data.Data);
+
+                } while (response.Data.Info.MoreRecords);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex.Message);
+                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning(ex.InnerException.ToString());
+            }
 
             zohoCRMVendorsResponseModel.Data = vendors;
 
@@ -91,40 +102,50 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             List<DispositionModel> dispositions = new();
             ZohoCOQLModel zohoCOQLModel = new();
 
+
             try
             {
-                do
+
+                foreach (var refundDisposition in ZohoInventoryRefundDispositions.RefundDispositions)
                 {
-                    zohoCOQLModel.Query = string.Format(_zohoCRMAndInventoryConfigurationSettings.DispositionCOQLQuery, ModelMapper.GetDateString(startDate), ModelMapper.GetDateString(endDate));
-
-                    var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCOQLPath);
-                    client.Timeout = -1;
-                    var request = new RestRequest(Method.POST);
-                    request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                    request.AddHeader("Content-Type", "application/json");
-                    var body = JsonConvert.SerializeObject(zohoCOQLModel);
-                    request.AddParameter("application/json", body, ParameterType.RequestBody);
-                    response = client.Execute<ZohoCRMDispositionResponseModel>(request);
-
-                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    var coqlStartDate = startDate;
+                    var coqlEndDate = endDate;
+                    do
                     {
-                        var retryClient = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoCRMBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoCRMVendorsPath);
-                        var retryRequest = new RestRequest(Method.GET);
-                        retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
-                        response = retryClient.Execute<ZohoCRMDispositionResponseModel>(request);
-                    }
+                        zohoCOQLModel.Query = string.Format(_configurationSettings.DispositionCOQLQuery, refundDisposition, ModelMapper.GetDateString(coqlStartDate), ModelMapper.GetDateString(coqlEndDate));
 
+                        var client = new RestClient(_configurationSettings.ZohoCRMBaseUrl + _configurationSettings.ZohoCOQLPath);
+                        client.Timeout = -1;
+                        var request = new RestRequest(Method.POST);
+                        request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                        request.AddHeader("Content-Type", "application/json");
+                        var body = JsonConvert.SerializeObject(zohoCOQLModel);
+                        request.AddParameter("application/json", body, ParameterType.RequestBody);
+                        response = client.Execute<ZohoCRMDispositionResponseModel>(request);
 
-                    if (response.Data.info.MoreRecords)
-                        startDate = response.Data.data.LastOrDefault().Timestamp;
+                        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                        {
+                            var retryClient = new RestClient(_configurationSettings.ZohoCRMBaseUrl + _configurationSettings.ZohoCRMVendorsPath);
+                            var retryRequest = new RestRequest(Method.GET);
+                            retryRequest.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
+                            response = retryClient.Execute<ZohoCRMDispositionResponseModel>(retryRequest);
+                        }
 
-                    dispositions.AddRange(response.Data.data);
+                        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                            break;
 
-                } while (response.Data.info.MoreRecords);
+                        if (response.Data.info.MoreRecords)
+                            coqlStartDate = response.Data.data.LastOrDefault().Timestamp;
+
+                        dispositions.AddRange(response.Data.data);
+
+                    } while (response.Data.info.MoreRecords);
+                }
             }
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
+               logger.LogWarning("Method Name -"+ new StackTrace(ex).GetFrame(0).GetMethod().Name);
                 logger.LogWarning(ex.InnerException.ToString());
             }
 

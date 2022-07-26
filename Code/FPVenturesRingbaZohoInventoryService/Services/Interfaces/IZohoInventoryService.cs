@@ -1,4 +1,5 @@
 ﻿using FPVenturesRingbaZohoInventoryService.Models;
+using System;
 using System.Collections.Generic;
 
 namespace FPVenturesRingbaZohoInventoryService.Services.Interfaces
@@ -10,6 +11,8 @@ namespace FPVenturesRingbaZohoInventoryService.Services.Interfaces
         public List<ZohoInventoryItemGroupReponseModel> CreateItemGroups(List<ZohoInventoryPostItemGroupRequestModel> newGroups);
         public void DeleteItem(List<ZohoInventoryItemGroupReponseModel> items);
         public ZohoInventoryVendorsResponseModel GetVendors();
+
+        public List<InventoryItem> GetInventoryItems(DateTime startDate, DateTime endDate);
 
     }
 }

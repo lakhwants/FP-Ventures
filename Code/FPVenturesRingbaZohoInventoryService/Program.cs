@@ -1,4 +1,5 @@
 ﻿using FPVenturesRingbaZohoInventory.Services;
+using FPVenturesRingbaZohoInventoryService.Constants;
 using FPVenturesRingbaZohoInventoryService.Models;
 using FPVenturesRingbaZohoInventoryService.Services.Interfaces;
 using FPVenturesRingbaZohoInventoryService.Services.Mapper;
@@ -17,11 +18,11 @@ namespace FPVenturesRingbaZohoInventoryService
         static void Main(string[] args)
         {
 
-             Configuration = new ConfigurationBuilder().
-                SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-            .AddJsonFile("local.settings.json", false)
-            .Build();
-           
+            Configuration = new ConfigurationBuilder().
+               SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+           .AddJsonFile("local.settings.json", false)
+           .Build();
+
             RingbaZohoConfigurationSettings ringbaZohoConfigurationSettings = GetConfigurationSettings();
 
             var serviceProvider = new ServiceCollection()
@@ -32,25 +33,41 @@ namespace FPVenturesRingbaZohoInventoryService
                                   .BuildServiceProvider();
 
 
-            var s= Configuration.GetSection("RingbaAccessToken").Value;
+            var s = Configuration.GetSection("RingbaAccessToken").Value;
 
-            var _ringbaService=serviceProvider.GetService<IRingbaService>();
+            var _ringbaService = serviceProvider.GetService<IRingbaService>();
             var _zohoInventoryService = serviceProvider.GetService<IZohoInventoryService>();
             var _zohoLeadsService = serviceProvider.GetService<IZohoLeadsService>();
 
             //DateTime endDate = new DateTime(2021, 12, 2);
             //DateTime startDate = endDate.AddDays(-10);
-            DateTime endDate = new DateTime(2022, 6, 25);
-            DateTime startDate = endDate.AddDays(-1);
+            DateTime endDate = new DateTime(2022, 7, 19);
+            DateTime startDate = new DateTime(2022, 7, 13);
 
 
 
             List<Record> callLogs;
             callLogs = _ringbaService.GetCallLogs(startDate, endDate);
 
-            var detailedCallLogs = _ringbaService.GetCallLogDetails(callLogs);
+            var detailedCallLogWithoutSKU = _ringbaService.GetCallLogDetails(callLogs);
+
+
+            var vendorsCRM = _zohoLeadsService.GetVendors();
+
+
+            var vendorInventory = _zohoInventoryService.GetVendors();
+
+
+            MapSKU(detailedCallLogWithoutSKU, vendorsCRM);
+
+
+            var existingItems = _zohoInventoryService.GetInventoryItems(startDate, endDate);
+
+            var detailedCallLogs = detailedCallLogWithoutSKU.Where(x => !existingItems.Any(y => y.SKU == x.SKU)).ToList();
 
             var callLogGroupsByPublishers = detailedCallLogs.GroupBy(x => x.PublisherName).ToList();
+
+
 
 
             var itemGroupList = _zohoInventoryService.GetItemGroupsList();
@@ -63,11 +80,6 @@ namespace FPVenturesRingbaZohoInventoryService
 
             var addedGroups = _zohoInventoryService.CreateItemGroups(newGroups);
 
-            var vendorsCRM = _zohoLeadsService.GetVendors();
-
-
-            var vendorInventory = _zohoInventoryService.GetVendors();
-
 
             var inventoryItems = ModelMapper.MapRingbaCallsToZohoInventoryItems(callLogGroupsByPublishers, _zohoInventoryService.GetItemGroupsList(), vendorInventory, vendorsCRM);
 
@@ -77,6 +89,44 @@ namespace FPVenturesRingbaZohoInventoryService
             _zohoInventoryService.DeleteItem(addedGroups);
         }
 
+        private static void MapSKU(List<Record> ringbaRecords, ZohoCRMVendorsResponseModel zohoCRMVendorsResponseModel)
+        {
+            foreach (var ringbaCallLog in ringbaRecords)
+            {
+
+                var vendor = zohoCRMVendorsResponseModel.Data.Where(x => x.PublisherName != null && x.PublisherName.Contains(ringbaCallLog.PublisherName)).FirstOrDefault();
+
+                ringbaCallLog.SKU = CreateSKU(ringbaCallLog, vendor);
+
+            }
+        }
+        public static string CreateSKU(Record ringbaCallLog, VendorCRM vendor)
+        {
+            string ticks = Convert.ToString(ringbaCallLog.CallDt.Ticks);
+
+            if (vendor == null)
+            {
+                return "NA" + "_" + RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) + "_" + ticks + "_" + Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) + "_" + ringbaCallLog.TaggedState;
+            }
+
+            return vendor.VendorAbbreviation + "_" + RemoveCountryCode(ringbaCallLog.InboundPhoneNumber) + "_" + ticks + "_" + Convert.ToString(TimeSpan.FromSeconds(ringbaCallLog.CallLengthInSeconds)) + "_" + ringbaCallLog.TaggedState;
+        }
+        public static string GetDateString(DateTime date)
+        {
+            return date.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK");
+        }
+
+        public static string RemoveCountryCode(string phone)
+        {
+            if (string.IsNullOrEmpty(phone))
+                return null;
+
+            foreach (var country in CountryCodes.PhoneCountryCodes)
+            {
+                phone = phone.Replace(country, "");
+            }
+            return phone;
+        }
         private static RingbaZohoConfigurationSettings GetConfigurationSettings()
         {
             return new()

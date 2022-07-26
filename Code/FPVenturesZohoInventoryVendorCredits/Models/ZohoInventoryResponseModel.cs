@@ -2,7 +2,6 @@
 
 namespace FPVenturesZohoInventoryVendorCredits.Models
 {
-
     public class Item
     {
         [JsonProperty("item_id")]

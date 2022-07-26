@@ -24,15 +24,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("source")]
         public string Source { get; set; }
 
-        [JsonProperty("is_combo_product")]
-        public bool IsComboProduct { get; set; }
-
-        [JsonProperty("is_linked_with_zohocrm")]
-        public bool IsLinkedWithZohocrm { get; set; }
-
-        [JsonProperty("zcrm_product_id")]
-        public string ZcrmProductId { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
 
@@ -66,9 +57,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("account_name")]
         public string AccountName { get; set; }
 
-        [JsonProperty("purchase_description")]
-        public string PurchaseDescription { get; set; }
-
         [JsonProperty("purchase_rate")]
         public double PurchaseRate { get; set; }
 
@@ -78,50 +66,8 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("product_type")]
         public string ProductType { get; set; }
 
-        [JsonProperty("is_taxable")]
-        public bool IsTaxable { get; set; }
-
-        [JsonProperty("tax_exemption_id")]
-        public string TaxExemptionId { get; set; }
-
-        [JsonProperty("tax_exemption_code")]
-        public string tax_exemption_code { get; set; }
-
-        [JsonProperty("stock_on_hand")]
-        public int stock_on_hand { get; set; }
-
-        [JsonProperty("has_attachment")]
-        public bool has_attachment { get; set; }
-
-        [JsonProperty("is_returnable")]
-        public bool is_returnable { get; set; }
-
-        [JsonProperty("available_stock")]
-        public int available_stock { get; set; }
-
-        [JsonProperty("actual_available_stock")]
-        public double actual_available_stock { get; set; }
-
         [JsonProperty("sku")]
         public string SKU { get; set; }
-
-        [JsonProperty("upc")]
-        public string UPC { get; set; }
-
-        [JsonProperty("ean")]
-        public string EAN { get; set; }
-
-        [JsonProperty("isbn")]
-        public string IsBN { get; set; }
-
-        [JsonProperty("created_time")]
-        public DateTime CreatedTime { get; set; }
-
-        [JsonProperty("last_modified_time")]
-        public DateTime LastModifiedTime { get; set; }
-
-        [JsonProperty("show_in_storefront")]
-        public bool ShowInStorefront { get; set; }
 
         [JsonProperty("cf_vendor")]
         public string CfVendor { get; set; }
@@ -153,8 +99,21 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("cf_call_date_time")]
         public DateTime CfCallDateTime { get; set; }
 
+        [JsonProperty("cf_leads_date_time")]
+        public DateTime CfLeadsDateTime { get; set; }
+
         [JsonProperty("cf_payout")]
         public string CfPayout { get; set; }
+
+        public string cf_datetime { get; set; }
+        public string cf_datetime_unformatted { get; set; }
+
+        public string cf_isringbalead { get; set; }
+        public bool cf_isringbalead_unformatted { get; set; }
+        public string cf_isheyflowlead { get; set; }
+        public bool cf_isheyflowlead_unformatted { get; set; }
+        public string cf_isunbouncelead { get; set; }
+        public bool cf_isunbouncelead_unformatted { get; set; }
     }
 
     public class SearchCriteria

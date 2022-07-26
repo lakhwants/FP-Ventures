@@ -11,7 +11,7 @@ namespace FPVenturesZohoInventoryVendorCredits
 	{
 		public static void Main()
 		{
-			ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings = GetConfigurationSettings();
+			ConfigurationSettings zohoCRMAndInventoryConfigurationSettings = GetConfigurationSettings();
 			var host = new HostBuilder()
 				.ConfigureFunctionsWorkerDefaults()
 				.ConfigureLogging((context, loggingBuilder) =>
@@ -28,7 +28,7 @@ namespace FPVenturesZohoInventoryVendorCredits
 			host.Run();
 		}
 
-		private static ZohoCRMAndInventoryConfigurationSettings GetConfigurationSettings()
+		private static ConfigurationSettings GetConfigurationSettings()
 		{
 			return new()
 			{
@@ -44,6 +44,9 @@ namespace FPVenturesZohoInventoryVendorCredits
 				ZohoCRMBaseUrl = Environment.GetEnvironmentVariable("ZohoCRMBaseUrl") ?? string.Empty,
 				ZohoInventoryVendorsPath = Environment.GetEnvironmentVariable("ZohoInventoryVendorsPath") ?? string.Empty,
 				ZohoCOQLPath = Environment.GetEnvironmentVariable("ZohoCOQLPath") ?? string.Empty,
+				RefundAccountId = Environment.GetEnvironmentVariable("RefundAccountId") ?? string.Empty,
+				ZohoInventoryVendorCreditsPath = Environment.GetEnvironmentVariable("ZohoInventoryVendorCreditsPath") ?? string.Empty,
+				ZohoInventoryItemPath = Environment.GetEnvironmentVariable("ZohoInventoryItemPath") ?? string.Empty
 			};
 		}
 	}

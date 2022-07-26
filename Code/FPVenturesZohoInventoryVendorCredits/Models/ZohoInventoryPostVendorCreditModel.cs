@@ -13,14 +13,19 @@ namespace FPVenturesZohoInventoryVendorCredits.Models
 
         [JsonProperty("quantity")]
         public int Quantity { get; set; }
+
+        [JsonProperty("account_id")]
+        public string AccountID { get; set; } = "2762310000000192193";
     }
 
     public class ZohoInventoryPostVendorCreditModel
     {
         public string vendor_id { get; set; }
         public string date { get; set; }
-        public bool is_inclusive_tax { get; set; }
         public List<LineItem> line_items { get; set; }
+
+        [JsonProperty("custom_fields")]
+        public List<CustomField> CustomFields { get; set; }
     }
 
 

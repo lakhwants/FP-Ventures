@@ -11,7 +11,7 @@ namespace FPVenturesZohoInventorySalesOrder
 	{
 		public static void Main()
 		{
-			ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfigurationSettings = GetConfigurationSettings();
+			ConfigurationSettings zohoCRMAndInventoryConfigurationSettings = GetConfigurationSettings();
 			var host = new HostBuilder()
 				.ConfigureFunctionsWorkerDefaults()
 				.ConfigureLogging((context, loggingBuilder) =>
@@ -21,24 +21,19 @@ namespace FPVenturesZohoInventorySalesOrder
 				{
 					services.AddSingleton(zohoCRMAndInventoryConfigurationSettings);
 					services.AddSingleton<IZohoInventoryService, ZohoInventoryService>();
-					services.AddSingleton<IZohoLeadsService, ZohoLeadsService>();
 				})
 				.Build();
 
 			host.Run();
 		}
 
-		private static ZohoCRMAndInventoryConfigurationSettings GetConfigurationSettings()
+		private static ConfigurationSettings GetConfigurationSettings()
 		{
 			return new()
 			{
-				ZohoAccessTokenFromRefreshTokenPath = Environment.GetEnvironmentVariable("ZohoAccessTokenFromRefreshTokenPath") ?? string.Empty,
-				ZohoLeadsBaseUrl = Environment.GetEnvironmentVariable("ZohoLeadsBaseUrl") ?? string.Empty,
 				ZohoClientId = Environment.GetEnvironmentVariable("ZohoClientId") ?? string.Empty,
 				ZohoClientSecret = Environment.GetEnvironmentVariable("ZohoClientSecret") ?? string.Empty,
-				ZohoRefreshToken = Environment.GetEnvironmentVariable("ZohoRefreshToken") ?? string.Empty,
-				COQLQuery = Environment.GetEnvironmentVariable("COQLQuery") ?? string.Empty,
-				ZohoCOQLPath = Environment.GetEnvironmentVariable("ZohoCOQLPath") ?? string.Empty,
+				ZohoAccessTokenFromRefreshTokenPath = Environment.GetEnvironmentVariable("ZohoAccessTokenFromRefreshTokenPath") ?? string.Empty,
 				ZohoInventoryBaseUrl = Environment.GetEnvironmentVariable("ZohoInventoryBaseUrl") ?? string.Empty,
 				ZohoInventoryItemPath = Environment.GetEnvironmentVariable("ZohoInventoryItemPath") ?? string.Empty,
 				ZohoInventoryRefreshToken = Environment.GetEnvironmentVariable("ZohoInventoryRefreshToken") ?? string.Empty,
@@ -47,9 +42,9 @@ namespace FPVenturesZohoInventorySalesOrder
 				ZohoInventoryTaxesPath = Environment.GetEnvironmentVariable("ZohoInventoryTaxesPath") ?? string.Empty,
 				ZohoInventorySalesOrderConfirmPath = Environment.GetEnvironmentVariable("ZohoInventorySalesOrderConfirmPath") ?? string.Empty,
 				ZohoInventoryOrganizationId = Environment.GetEnvironmentVariable("ZohoInventoryOrganizationId") ?? string.Empty,
-				ZohoInventorySearchParameter = Environment.GetEnvironmentVariable("ZohoInventorySearchParameter") ?? string.Empty,
 				ZohoInventoryContactsPath = Environment.GetEnvironmentVariable("ZohoInventoryContactsPath") ?? string.Empty,
 				ZohoInventoryContactPersonPath = Environment.GetEnvironmentVariable("ZohoInventoryContactPersonPath") ?? string.Empty,
+				ZohoInventoryInvoiceFromSalesOrderPath = Environment.GetEnvironmentVariable("ZohoInventoryInvoiceFromSalesOrderPath") ?? string.Empty,
 				ZohoInventoryCustomerName = Environment.GetEnvironmentVariable("ZohoInventoryCustomerName") ?? string.Empty
 			};
 		}

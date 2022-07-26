@@ -4,59 +4,88 @@ using FPVenturesZohoInventoryVendorCredits.Services.Mapper;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FPVenturesZohoInventoryVendorCredits
 {
     public class FPVenturesZohoInventoryVendorCreditsFunction
-	{
-		readonly IZohoInventoryService _zohoInventoryService;
-		readonly IZohoLeadsService _zohoLeadsService;
-		public ZohoCRMAndInventoryConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
-		const string AzureFunctionName = "FPVenturesZohoInventoryVendorCreditsFunction";
+    {
+        readonly IZohoInventoryService _zohoInventoryService;
+        readonly IZohoLeadsService _zohoLeadsService;
+        public ConfigurationSettings _zohoCRMAndInventoryConfigurationSettings;
+        const string AzureFunctionName = "FPVenturesZohoInventoryVendorCreditsFunction";
 
-		public FPVenturesZohoInventoryVendorCreditsFunction(IZohoLeadsService zohoLeadsService, IZohoInventoryService zohoInventoryService, ZohoCRMAndInventoryConfigurationSettings zohoCRMAndInventoryConfiguration)
-		{
-			_zohoInventoryService = zohoInventoryService;
-			_zohoLeadsService = zohoLeadsService;
-			_zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfiguration;
-		}
-
-		[Function(AzureFunctionName)]
-		public async Task RunAsync([TimerTrigger("%VendorCreditsSchedule%")] TimerInfo timerInfo, FunctionContext context)
-		{
-
-			var logger = context.GetLogger(AzureFunctionName);
-
-			DateTime lastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).ToLocalTime();
-
-            DateTime endDate = lastMonth.AddDays(-1);
-            DateTime startDate = lastMonth.AddMonths(-1);
-
-			var dispositions = _zohoLeadsService.GetZohoDispositions(startDate,endDate,logger);
-			var vendorsCRM = _zohoLeadsService.GetVendors();
-			var vendorsInventory = _zohoInventoryService.GetVendors();
-			var inventoryItems = _zohoInventoryService.GetInventoryItems(startDate,endDate);
-
-			var vendorCreditModels = ModelMapper.MapVendorCreditsModel(inventoryItems,vendorsCRM.Data,vendorsInventory.Contacts,dispositions);
-
-			_zohoInventoryService.PostVendorCredits(vendorCreditModels);
+        public FPVenturesZohoInventoryVendorCreditsFunction(IZohoLeadsService zohoLeadsService, IZohoInventoryService zohoInventoryService, ConfigurationSettings zohoCRMAndInventoryConfiguration)
+        {
+            _zohoInventoryService = zohoInventoryService;
+            _zohoLeadsService = zohoLeadsService;
+            _zohoCRMAndInventoryConfigurationSettings = zohoCRMAndInventoryConfiguration;
         }
 
-		//private static void LogReponseModels(ILogger logger, ZohoInventorySalesOrderResponseModel zohoInventoryResponseModel)
-		//{
-		//	logger.LogWarning($"{nameof(zohoInventoryResponseModel.Message)} = {zohoInventoryResponseModel.Message}, " +
-		//		$"{nameof(zohoInventoryResponseModel.SalesOrder.CustomerId)} = {zohoInventoryResponseModel.SalesOrder.CustomerId}, " +
-		//		$"{nameof(zohoInventoryResponseModel.SalesOrder.CustomerName)} = {zohoInventoryResponseModel.SalesOrder.CustomerName} , " +
-		//		$"{nameof(zohoInventoryResponseModel.SalesOrder.Date)} = {zohoInventoryResponseModel.SalesOrder.Date}, ");
+        [Function(AzureFunctionName)]
+        public async Task RunAsync([TimerTrigger("%VendorCreditsSchedule%")] TimerInfo timerInfo, FunctionContext context)
+        {
 
-		//	foreach (var item in zohoInventoryResponseModel.SalesOrder.LineItems)
-		//	{
-		//		logger.LogWarning($"{nameof(item.Name)} = {(item.Name)}, " +
-		//	$"{nameof(item.Rate)} = {(item.Rate)}, " +
-		//	$"{nameof(item.TaxId)} = {(item.TaxId)} ");
-		//	}
+            List<string> removeVendors = new()
+            {
+               "Nationwide",
+               "Google"
+            };
 
-		//}
-	}
+            var logger = context.GetLogger(AzureFunctionName);
+
+            DateTime startDate = DateTime.Now.Date.AddDays(-(int)DateTime.Now.Date.DayOfWeek - 8);
+            DateTime endDate = startDate.AddDays(7).AddSeconds(-1);
+
+            //DateTime endDate = (new DateTime(2022, 7, 24)).AddSeconds(-1);
+            //DateTime startDate = new DateTime(2022, 7, 17);
+
+            logger.LogInformation($"Start Date - {startDate}");
+            logger.LogInformation($"End Date - {endDate}");
+
+            logger.LogInformation("Fetching Dispositions");
+            var dispositions = _zohoLeadsService.GetZohoDispositions(startDate, endDate, logger);
+            logger.LogInformation($"Total dispositions - {dispositions}");
+
+            logger.LogInformation("Fetching CRM Vendors");
+            var vendorsCRM = _zohoLeadsService.GetVendors(logger);
+            logger.LogInformation($"CRM Vendors fetched - {vendorsCRM.Data.Count}");
+
+            logger.LogInformation("Fetching inventory Vendors");
+            var vendorsInventory = _zohoInventoryService.GetVendors(logger);
+            logger.LogInformation($"InventoryVendors fetched - {vendorsInventory.Contacts.Count}");
+
+            logger.LogInformation("Fetching inventory items");
+            var inventoryItems = _zohoInventoryService.GetInventoryItems(startDate, endDate, logger);
+            logger.LogInformation($"CRM Vendors fetched - {inventoryItems.Count}");
+
+            logger.LogInformation("Mapping vendor credits");
+            var vendorCreditModels = ModelMapper.MapVendorCreditsModel(inventoryItems, vendorsCRM.Data.Where(x=> !removeVendors.Contains(x.VendorName)).ToList(), vendorsInventory.Contacts.Where(x=> !removeVendors.Contains(x.VendorName)).ToList(), dispositions, startDate, endDate,logger);
+
+            logger.LogInformation("Posting vendor credits");
+            var vendorCreditResponseModel = _zohoInventoryService.PostVendorCredits(vendorCreditModels, logger);
+
+            LogVendorCreditResponseModel(vendorCreditResponseModel, logger);
+            logger.LogInformation("Finished.....");
+
+        }
+
+        private void LogVendorCreditResponseModel(List<ZohoInventoryVendorCreditResponseModel> vendorCreditResponseModels, ILogger logger)
+        {
+            foreach (var vendorCreditResponseModel in vendorCreditResponseModels)
+            {
+                logger.LogInformation($"{nameof(vendorCreditResponseModel.Message)} = {vendorCreditResponseModel.Message}");
+
+                if (vendorCreditResponseModel == null)
+                    continue;
+
+                logger.LogInformation($"{nameof(vendorCreditResponseModel.VendorCredit.VendorName)} = {vendorCreditResponseModel.VendorCredit.VendorName}, " +
+                        $"{nameof(vendorCreditResponseModel.VendorCredit.Status)} = {vendorCreditResponseModel.VendorCredit.Status}, " +
+                        $"{nameof(vendorCreditResponseModel.VendorCredit.VendorCreditId)} = {vendorCreditResponseModel.VendorCredit.VendorCreditId} ");
+            }
+        }
+
+    }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FPVenturesRingbaZohoInventory.Constants
+namespace FPVenturesRingbaZohoInventoryService.Constants
 {
     public class CountryCodes
 	{

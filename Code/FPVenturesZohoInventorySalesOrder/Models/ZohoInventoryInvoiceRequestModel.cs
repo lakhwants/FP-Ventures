@@ -15,6 +15,8 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("line_items")]
         public List<LineItem> LineItems { get; set; }
 
+        [JsonProperty("custom_fields")]
+        public List<CustomField> CustomFields { get; set; }
     }
 
 }
