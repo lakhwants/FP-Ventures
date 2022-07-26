@@ -16,10 +16,10 @@ namespace FPVenturesFive9InventoryDisposition.Services
 {
     public class Five9Service : IFive9Service
 	{
-		public readonly Five9ZohoInventoryConfigurationSettings _five9ZohoConfigurationSettings;
+		public readonly Five9ZohoInventoryConfigurationSettings _five9ZohoInventoryConfigurationSettings;
 		public Five9Service(Five9ZohoInventoryConfigurationSettings five9ZohoConfigurationSettings)
 		{
-			_five9ZohoConfigurationSettings = five9ZohoConfigurationSettings;
+			_five9ZohoInventoryConfigurationSettings = five9ZohoConfigurationSettings;
 		}
 		public List<Five9Model> CallWebService(DateTime startDate, DateTime endDate)
 		{
@@ -27,7 +27,7 @@ namespace FPVenturesFive9InventoryDisposition.Services
 
 
 			//RunReport
-			MakeRequestToFive9(string.Format(SoapRequestBodies.RunReport, "Andrew Sales Inbound Call Log", endDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK"), startDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK")), _five9ZohoConfigurationSettings.Five9BaseUrl, _five9ZohoConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequest, out IAsyncResult asyncResult);
+			MakeRequestToFive9(string.Format(SoapRequestBodies.RunReport, "Andrew Sales Inbound Call Log", endDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK"), startDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK")), _five9ZohoInventoryConfigurationSettings.Five9BaseUrl, _five9ZohoInventoryConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequest, out IAsyncResult asyncResult);
 			string reportId = GetValuesFromSoapResponse<string>(webRequest, asyncResult, "runReportResponse", "http://service.admin.ws.five9.com/");
 
 			if (string.IsNullOrEmpty(reportId))
@@ -38,14 +38,14 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			while (isReportRunning)
 			{
 				Thread.Sleep(3000);
-				MakeRequestToFive9(string.Format(SoapRequestBodies.IsReportRunning, reportId), _five9ZohoConfigurationSettings.Five9BaseUrl, _five9ZohoConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequestIsReportRunning, out IAsyncResult asyncResultIsReportRunning);
+				MakeRequestToFive9(string.Format(SoapRequestBodies.IsReportRunning, reportId), _five9ZohoInventoryConfigurationSettings.Five9BaseUrl, _five9ZohoInventoryConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequestIsReportRunning, out IAsyncResult asyncResultIsReportRunning);
 				isReportRunning = GetValuesFromSoapResponse<bool>(webRequestIsReportRunning, asyncResultIsReportRunning, "isReportRunningResponse", "http://service.admin.ws.five9.com/");
 			}
 
 			Thread.Sleep(5000); //Report result is ready after a delay
 
 			//GetReportResult
-			MakeRequestToFive9(string.Format(SoapRequestBodies.GetReportResultCsv, reportId), _five9ZohoConfigurationSettings.Five9BaseUrl, _five9ZohoConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequestGetReportResultCsv, out IAsyncResult asyncResultGetReportResultCsv);
+			MakeRequestToFive9(string.Format(SoapRequestBodies.GetReportResultCsv, reportId), _five9ZohoInventoryConfigurationSettings.Five9BaseUrl, _five9ZohoInventoryConfigurationSettings.Five9MethodAction, out HttpWebRequest webRequestGetReportResultCsv, out IAsyncResult asyncResultGetReportResultCsv);
 
 			string csvResult = GetValuesFromSoapResponse<string>(webRequestGetReportResultCsv, asyncResultGetReportResultCsv, "getReportResultCsvResponse", "http://service.admin.ws.five9.com/", "return");
 			if (string.IsNullOrEmpty(csvResult))
@@ -59,7 +59,7 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			return five9Models;
 		}
 
-		private static List<Five9Model> CsvToFive9Model(DataTable csvTable)
+		private List<Five9Model> CsvToFive9Model(DataTable csvTable)
 		{
 			List<Five9Model> five9Models = new();
 
@@ -98,7 +98,7 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			return five9Models;
 		}
 
-		private static void MakeRequestToFive9(string body, string _url, string _action, out HttpWebRequest webRequest, out IAsyncResult asyncResult)
+		private void MakeRequestToFive9(string body, string _url, string _action, out HttpWebRequest webRequest, out IAsyncResult asyncResult)
 		{
 			XmlDocument soapEnvelopeXml = CreateSoapEnvelope(body);
 			webRequest = CreateWebRequest(_url, _action);
@@ -109,7 +109,7 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			asyncResult.AsyncWaitHandle.WaitOne();
 		}
 
-		private static DataTable ConvertCSVtoDataTable(string strFilePath)
+		private DataTable ConvertCSVtoDataTable(string strFilePath)
 		{
 			byte[] byteArray = Encoding.UTF8.GetBytes(strFilePath);
 			MemoryStream stream = new(byteArray);
@@ -133,7 +133,7 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			return dt;
 		}
 
-		private static T GetValuesFromSoapResponse<T>(HttpWebRequest webRequest, IAsyncResult asyncResult, string descendants, XNamespace ns2, string elementValue = null)
+		private T GetValuesFromSoapResponse<T>(HttpWebRequest webRequest, IAsyncResult asyncResult, string descendants, XNamespace ns2, string elementValue = null)
 		{
 			object value = null;
 			using (WebResponse webResponse = webRequest.EndGetResponse(asyncResult))
@@ -161,24 +161,24 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			return (T)Convert.ChangeType(value, typeof(T)); ;
 		}
 
-		private static HttpWebRequest CreateWebRequest(string url, string action)
+		private HttpWebRequest CreateWebRequest(string url, string action)
 		{
 			HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
 			webRequest.Headers.Add("SOAPAction", action);
-			webRequest.Headers.Add("Authorization", "Basic YW5kcmV3bGVhZHpAZ21haWwuY29tOkhhd3gkJDI0NDI=");
+			webRequest.Headers.Add("Authorization", "Basic "+ _five9ZohoInventoryConfigurationSettings.Five9BasicAuthenticationToken);
 			webRequest.ContentType = "text/xml;charset=\"utf-8\"";
 			webRequest.Method = "POST";
 			return webRequest;
 		}
 
-		private static XmlDocument CreateSoapEnvelope(string body)
+		private XmlDocument CreateSoapEnvelope(string body)
 		{
 			XmlDocument soapEnvelopeDocument = new();
 			soapEnvelopeDocument.LoadXml(body);
 			return soapEnvelopeDocument;
 		}
 
-		private static void InsertSoapEnvelopeIntoWebRequest(XmlDocument soapEnvelopeXml, HttpWebRequest webRequest)
+		private void InsertSoapEnvelopeIntoWebRequest(XmlDocument soapEnvelopeXml, HttpWebRequest webRequest)
 		{
 			using (Stream stream = webRequest.GetRequestStream())
 			{

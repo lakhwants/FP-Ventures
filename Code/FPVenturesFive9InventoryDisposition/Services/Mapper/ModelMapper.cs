@@ -137,7 +137,7 @@ namespace FPVenturesFive9InventoryDisposition.Services.Mapper
 				callDispositionModelRecord.Disposition = five9Model.Disposition;
 				callDispositionModelRecord.Campaign = five9Model.Campaign;
 				callDispositionModelRecord.Agent = five9Model.Agent;
-				callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"'));
+				callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"')).AddHours(7);
 				callDispositionModelRecord.Skill = five9Model.Skill;
 
 
@@ -153,6 +153,7 @@ namespace FPVenturesFive9InventoryDisposition.Services.Mapper
 					callDispositionModelRecord.RingbaOrUnbounce = "Web Lead";
 					callDispositionRecordModels.Add(callDispositionModelRecord);
 				}
+
 
 			}
 

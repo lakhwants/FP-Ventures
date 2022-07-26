@@ -36,12 +36,18 @@ namespace FPVenturesFive9InventoryDisposition
 			{
 				ZohoAccessTokenFromRefreshTokenPath = Environment.GetEnvironmentVariable("ZohoAccessTokenFromRefreshTokenPath") ?? string.Empty,
 				ZohoAddDispositionsPath = Environment.GetEnvironmentVariable("ZohoAddDispositionsPath") ?? string.Empty,
+				ZohoCheckDuplicateDispositionsPath = Environment.GetEnvironmentVariable("ZohoCheckDuplicateDispositionsPath") ?? string.Empty,
+				ZohoInventoryItemPath = Environment.GetEnvironmentVariable("ZohoInventoryItemPath") ?? string.Empty,
 				ZohoBaseUrl = Environment.GetEnvironmentVariable("ZohoBaseUrl") ?? string.Empty,
+				ZohoInventoryBaseUrl = Environment.GetEnvironmentVariable("ZohoInventoryBaseUrl") ?? string.Empty,
 				ZohoClientId = Environment.GetEnvironmentVariable("ZohoClientId") ?? string.Empty,
 				ZohoClientSecret = Environment.GetEnvironmentVariable("ZohoClientSecret") ?? string.Empty,
+				ZohoRefreshToken = Environment.GetEnvironmentVariable("ZohoRefreshToken") ?? string.Empty,
+				ZohoInventoryRefreshToken = Environment.GetEnvironmentVariable("ZohoInventoryRefreshToken") ?? string.Empty,
 				Five9BaseUrl=Environment.GetEnvironmentVariable("Five9BaseUrl") ?? string.Empty,
 				Five9ServiceNamespace=Environment.GetEnvironmentVariable("Five9ServiceNamespace") ?? string.Empty,
-				Five9MethodAction=Environment.GetEnvironmentVariable("Five9MethodAction") ?? string.Empty
+				Five9MethodAction=Environment.GetEnvironmentVariable("Five9MethodAction") ?? string.Empty,
+				Five9BasicAuthenticationToken = Environment.GetEnvironmentVariable("Five9BasicAuthenticationToken") ?? string.Empty,
 			};
 		}
 	}

@@ -1,6 +1,3 @@
-using FPVenturesFive9Disposition.Models;
-using FPVenturesFive9Disposition.Services.Mapper;
-using FPVenturesFive9Dispostion.Services.Interfaces;
 using FPVenturesFive9InventoryDisposition.Models;
 using FPVenturesFive9InventoryDisposition.Services.Interfaces;
 using FPVenturesFive9InventoryDisposition.Services.Mapper;
@@ -12,12 +9,12 @@ using System.Linq;
 
 namespace FPVenturesFive9InventoryDisposition
 {
-	public class FPVenturesFive9InventoryDisposition
+    public class FPVenturesFive9InventoryDisposition
 	{
 		public readonly IZohoInventoryService _zohoInventoryService;
 		public readonly IFive9Service _five9Service;
 		public readonly IZohoService _zohoService;
-		const string AzureFunctionName = "FPVenturesFive9Dispositions";
+		const string AzureFunctionName = "FPVenturesFive9InventoryDisposition";
 
 		public FPVenturesFive9InventoryDisposition(IZohoInventoryService zohoInventoryService, IFive9Service five9Service, IZohoService zohoService)
 		{
@@ -44,7 +41,7 @@ namespace FPVenturesFive9InventoryDisposition
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
 			DateTime endDate = DateTime.Now;
-			DateTime startDate = endDate.AddDays(-14);
+			DateTime startDate = endDate.AddDays(-4);
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);
 			var five9FilteredRecords = five9Records.Where(x => !removeDispositions.Any(y => y == x.Disposition)).ToList();

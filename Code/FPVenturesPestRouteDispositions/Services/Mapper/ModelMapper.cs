@@ -70,7 +70,7 @@ namespace FPVenturesFive9PestRouteDispositions.Services.Mapper
 				callDispositionModelRecord.Campaign = five9Model.Campaign;
 				callDispositionModelRecord.CallType = five9Model.CallType;
 				callDispositionModelRecord.ListName = five9Model.ListName;
-				callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"'));
+				callDispositionModelRecord.Timestamp = Convert.ToDateTime(five9Model.Timestamp.Trim('"')).AddHours(7);
 				callDispositionModelRecord.IsPestRouteDisposition = true;
 
 				if (zohoLeads.Any(x => x.CallerID == five9Model.ANI))
