@@ -9,13 +9,10 @@ namespace FPVenturesZohoInventoryBill.Models
         [JsonProperty("Vendor_Abbreviation")]
         public string VendorAbbreviation { get; set; }
         public string Email { get; set; }
-        public string Category { get; set; }
-        public string Description { get; set; }
 
         [JsonProperty("Vendor_Name")]
         public string VendorName { get; set; }
         public string Phone { get; set; }
-        public string Street { get; set; }
 
         [JsonProperty("Zip_Code")]
         public string ZipCode { get; set; }

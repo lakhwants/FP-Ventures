@@ -1,11 +1,11 @@
-﻿using FPVenturesZohoInventorySalesOrder.Models;
+﻿using FPVenturesZohoInventorySalesOrder.Helpers;
+using FPVenturesZohoInventorySalesOrder.Models;
 using FPVenturesZohoInventorySalesOrder.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace FPVenturesZohoInventorySalesOrder.Services
@@ -50,7 +50,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;
@@ -73,8 +73,8 @@ namespace FPVenturesZohoInventorySalesOrder.Services
                     request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                     request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
                     request.AddParameter("page", page);
-                    request.AddParameter("custom_field_2762310000006617897_start", startDate.ToString("yyyy-MM-dd"));
-                    request.AddParameter("custom_field_2762310000006617897_end", endDate.ToString("yyyy-MM-dd"));
+                    request.AddParameter("custom_field_2762310000006617897_start", startDate.ToInventoryDate());
+                    request.AddParameter("custom_field_2762310000006617897_end", endDate.ToInventoryDate());
                     response = client.Execute<ZohoInventoryItemModel>(request);
 
                     if (response != null || response.Data != null || response.Data.Items.Any())
@@ -88,7 +88,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
 
@@ -116,7 +116,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;
@@ -137,7 +137,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;
@@ -161,7 +161,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;
@@ -174,7 +174,6 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             {
                 ZohoAccessToken = GetZohoAccessTokenFromRefreshToken();
                 var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryContactsPath);
-                client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                 request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
@@ -184,7 +183,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;
@@ -196,7 +195,6 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             try
             {
                 var client = new RestClient(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryBaseUrl + String.Format(_zohoCRMAndInventoryConfigurationSettings.ZohoInventoryContactPersonPath, customerId));
-                client.Timeout = -1;
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                 request.AddParameter("organization_id", _zohoCRMAndInventoryConfigurationSettings.ZohoInventoryOrganizationId);
@@ -206,7 +204,7 @@ namespace FPVenturesZohoInventorySalesOrder.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
             return response.Data;

@@ -1,5 +1,4 @@
-﻿using ConsoleFPVentures.Constants;
-using FPVentures.Constants;
+﻿using FPVentures.Constants;
 using FPVentures.Models;
 using FPVentures.Services.Interfaces;
 using FPVentures.Shared;
@@ -12,7 +11,7 @@ using static FPVentures.Shared.Enums;
 
 namespace FPVentures.Services
 {
-	public class RingbaService : IRingbaService
+    public class RingbaService : IRingbaService
 	{
 
 		public RingbaZohoConfigurationSettings _ringbaZohoConfigurationSettings;

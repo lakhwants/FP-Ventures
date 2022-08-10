@@ -1,11 +1,11 @@
-﻿using FPVenturesZohoInventoryVendorCredits.Models;
+﻿using FPVenturesZohoInventoryVendorCredits.Helpers;
+using FPVenturesZohoInventoryVendorCredits.Models;
 using FPVenturesZohoInventoryVendorCredits.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace FPVenturesZohoInventoryVendorCredits.Services
@@ -54,8 +54,8 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
                     request.AddHeader("Authorization", "Zoho-oauthtoken " + ZohoAccessToken);
                     request.AddParameter("organization_id", _configurationSettings.ZohoInventoryOrganizationId);
                     request.AddParameter("page", page);
-                    request.AddParameter("custom_field_2762310000006617897_start", startDate.ToString("yyyy-MM-dd"));
-                    request.AddParameter("custom_field_2762310000006617897_end", endDate.ToString("yyyy-MM-dd"));
+                    request.AddParameter("custom_field_2762310000006617897_start", startDate.ToInventoryDate());
+                    request.AddParameter("custom_field_2762310000006617897_end", endDate.ToInventoryDate());
                     response = client.Execute<ZohoInventoryItemModel>(request);
 
                     if (response.StatusCode == 0)
@@ -75,10 +75,9 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
-
 
             return inventoryItems;
         }
@@ -116,7 +115,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
 
@@ -150,7 +149,7 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                logger.LogWarning("Method Name -" + new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace FPVenturesZohoInventory.Services.Mapper
 {
-	public class ModelMapper
+    public class ModelMapper
 	{
 		public static List<ZohoInventoryModel> MapZohoLeadsToZohoInventoryItems(List<Data> zohoLeads)
 		{

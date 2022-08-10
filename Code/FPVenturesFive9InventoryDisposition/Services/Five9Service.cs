@@ -59,6 +59,11 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			return five9Models;
 		}
 
+		/// <summary>
+		/// Converts CSV to Five9 Disposition models
+		/// </summary>
+		/// <param name="csvTable">Data Table of created using CSV</param>
+		/// <returns>Returns list of Five9 Disposition models</returns>
 		private List<Five9Model> CsvToFive9Model(DataTable csvTable)
 		{
 			List<Five9Model> five9Models = new();
@@ -109,6 +114,11 @@ namespace FPVenturesFive9InventoryDisposition.Services
 			asyncResult.AsyncWaitHandle.WaitOne();
 		}
 
+		/// <summary>
+		/// Converts CSV to Data table
+		/// </summary>
+		/// <param name="strFilePath">Csv string</param>
+		/// <returns>Returns DataTable of the CSV String</returns>
 		private DataTable ConvertCSVtoDataTable(string strFilePath)
 		{
 			byte[] byteArray = Encoding.UTF8.GetBytes(strFilePath);

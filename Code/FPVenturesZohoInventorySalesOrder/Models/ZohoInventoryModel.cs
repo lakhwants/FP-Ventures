@@ -33,12 +33,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 		[JsonProperty("product_type")]
 		public string ProductType { get; set; }
 
-		[JsonProperty("created_time")]
-		public DateTime CreatedTime { get; set; }
-
-		[JsonProperty("last_modified_time")]
-		public DateTime LastModifiedTime { get; set; }
-
 		[JsonProperty("custom_fields")]
 		public List<CustomField> CustomFields { get; set; }
 	}

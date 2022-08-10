@@ -36,18 +36,18 @@ namespace FPVenturesZohoInventoryVendorCredits
 
             var logger = context.GetLogger(AzureFunctionName);
 
-            DateTime startDate = DateTime.Now.Date.AddDays(-(int)DateTime.Now.Date.DayOfWeek - 8);
-            DateTime endDate = startDate.AddDays(7).AddSeconds(-1);
+            //DateTime startDate = DateTime.Now.Date.AddDays(-(int)DateTime.Now.Date.DayOfWeek - 8);
+            //DateTime endDate = startDate.AddDays(7).AddSeconds(-1);
 
-            //DateTime endDate = (new DateTime(2022, 7, 24)).AddSeconds(-1);
-            //DateTime startDate = new DateTime(2022, 7, 17);
+            DateTime endDate = new DateTime(2022, 8, 7).AddSeconds(-1);
+            DateTime startDate = new(2022, 7, 31);
 
             logger.LogInformation($"Start Date - {startDate}");
             logger.LogInformation($"End Date - {endDate}");
 
             logger.LogInformation("Fetching Dispositions");
             var dispositions = _zohoLeadsService.GetZohoDispositions(startDate, endDate, logger);
-            logger.LogInformation($"Total dispositions - {dispositions}");
+            logger.LogInformation($"Total dispositions - {dispositions.Count}");
 
             logger.LogInformation("Fetching CRM Vendors");
             var vendorsCRM = _zohoLeadsService.GetVendors(logger);
@@ -72,7 +72,7 @@ namespace FPVenturesZohoInventoryVendorCredits
 
         }
 
-        private void LogVendorCreditResponseModel(List<ZohoInventoryVendorCreditResponseModel> vendorCreditResponseModels, ILogger logger)
+        private static void LogVendorCreditResponseModel(List<ZohoInventoryVendorCreditResponseModel> vendorCreditResponseModels, ILogger logger)
         {
             foreach (var vendorCreditResponseModel in vendorCreditResponseModels)
             {

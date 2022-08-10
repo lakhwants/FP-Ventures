@@ -46,11 +46,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("mobile")]
         public string Mobile { get; set; }
 
-        [JsonProperty("created_time")]
-        public DateTime CreatedTime { get; set; }
-
-        [JsonProperty("last_modified_time")]
-        public DateTime LastModifiedTime { get; set; }
     }
 
     public class ZohoInventoryContactsResponseModel : PageContext

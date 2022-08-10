@@ -18,18 +18,6 @@ namespace FPVenturesZohoInventoryBill.Models
         [JsonProperty("status")]
         public string Status { get; set; }
 
-        [JsonProperty("source")]
-        public string Source { get; set; }
-
-        [JsonProperty("is_linked_with_zohocrm")]
-        public bool IsLinkedWithZohocrm { get; set; }
-
-        [JsonProperty("zcrm_product_id")]
-        public string ZcrmProductId { get; set; }
-
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
         [JsonProperty("rate")]
         public double Rate { get; set; }
 
@@ -38,9 +26,6 @@ namespace FPVenturesZohoInventoryBill.Models
 
         [JsonProperty("tax_name")]
         public string TaxName { get; set; }
-
-        [JsonProperty("tax_percentage")]
-        public int TaxPercentage { get; set; }
 
         [JsonProperty("purchase_account_id")]
         public string PurchaseAccountId { get; set; }

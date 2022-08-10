@@ -1,7 +1,7 @@
 ﻿using FPVenturesZohoInventoryVendorCredits.Constants;
+using FPVenturesZohoInventoryVendorCredits.Helpers;
 using FPVenturesZohoInventoryVendorCredits.Models;
 using FPVenturesZohoInventoryVendorCredits.Services.Interfaces;
-using FPVenturesZohoInventoryVendorCredits.Services.Mapper;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -102,17 +102,15 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             List<DispositionModel> dispositions = new();
             ZohoCOQLModel zohoCOQLModel = new();
 
-
             try
             {
-
                 foreach (var refundDisposition in ZohoInventoryRefundDispositions.RefundDispositions)
                 {
                     var coqlStartDate = startDate;
                     var coqlEndDate = endDate;
                     do
                     {
-                        zohoCOQLModel.Query = string.Format(_configurationSettings.DispositionCOQLQuery, refundDisposition, ModelMapper.GetDateString(coqlStartDate), ModelMapper.GetDateString(coqlEndDate));
+                        zohoCOQLModel.Query = string.Format(_configurationSettings.DispositionCOQLQuery, refundDisposition, coqlStartDate.ToZohoDateString(), coqlEndDate.ToZohoDateString());
 
                         var client = new RestClient(_configurationSettings.ZohoCRMBaseUrl + _configurationSettings.ZohoCOQLPath);
                         client.Timeout = -1;
@@ -145,11 +143,12 @@ namespace FPVenturesZohoInventoryVendorCredits.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-               logger.LogWarning("Method Name -"+ new StackTrace(ex).GetFrame(0).GetMethod().Name);
+                logger.LogWarning("Method Name -" + ex.GetMethodName());
                 logger.LogWarning(ex.InnerException.ToString());
             }
 
             return dispositions;
         }
+
     }
 }

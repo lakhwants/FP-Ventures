@@ -56,7 +56,7 @@ namespace FPVenturesZohoInventory
 
             logger.LogInformation("Fetching Item groups");
 
-            var itemGroupList = _zohoInventoryService.GetItemGroupsList();
+            var itemGroupList = _zohoInventoryService.GetItemGroupsList(logger);
 
             logger.LogInformation($"Item groups - {itemGroupList.ItemGroups.Count}");
 
@@ -68,7 +68,7 @@ namespace FPVenturesZohoInventory
             var newGroups = ModelMapper.MapNewItemGroups(groupsToAdd);
 
             logger.LogInformation("Posting Item groups");
-            var addedGroups = _zohoInventoryService.CreateItemGroups(newGroups);
+            var addedGroups = _zohoInventoryService.CreateItemGroups(newGroups, logger);
 
             logger.LogInformation("Fetching CRM vendors");
             var vendorsCRM = _zohoLeadsService.GetVendors();
@@ -76,14 +76,14 @@ namespace FPVenturesZohoInventory
             logger.LogInformation($"CRM Vendors - {vendorsCRM.Data.Count}");
 
             logger.LogInformation("Fetching Inventory vendors");
-            var vendorInventory = _zohoInventoryService.GetVendors();
+            var vendorInventory = _zohoInventoryService.GetVendors(logger);
 
             logger.LogInformation($"Inventory Vendors - {vendorInventory.Contacts.Count}");
 
             logger.LogInformation("Mapping items to the Item Groups");
-            var inventoryItems = ModelMapper.MapRingbaCallsToZohoInventoryItems(callLogGroupsByPublishers, _zohoInventoryService.GetItemGroupsList(), vendorInventory, vendorsCRM);
+            var inventoryItems = ModelMapper.MapRingbaCallsToZohoInventoryItems(callLogGroupsByPublishers, _zohoInventoryService.GetItemGroupsList(logger), vendorInventory, vendorsCRM, logger);
 
-            
+
             if (!inventoryItems.Any())
             {
                 logger.LogInformation("No new calls found");
@@ -91,7 +91,7 @@ namespace FPVenturesZohoInventory
 
             logger.LogInformation("Adding items to inventory item groups");
 
-            var zohoInventoryResponseModel = _zohoInventoryService.AddLeadsToZohoInventory(inventoryItems);
+            var zohoInventoryResponseModel = _zohoInventoryService.AddLeadsToZohoInventory(inventoryItems, logger);
 
             if (zohoInventoryResponseModel == null)
             {
@@ -103,7 +103,7 @@ namespace FPVenturesZohoInventory
             }
 
             logger.LogInformation("Deleting the Demo items");
-            _zohoInventoryService.DeleteItem(addedGroups);
+            _zohoInventoryService.DeleteItem(addedGroups, logger);
             logger.LogInformation("Finished.....");
         }
 

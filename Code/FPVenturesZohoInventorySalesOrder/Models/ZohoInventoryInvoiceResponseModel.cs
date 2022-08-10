@@ -9,50 +9,17 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("customfield_id")]
         public string CustomFieldId { get; set; }
 
-        [JsonProperty("show_in_store")]
-        public bool ShowInStore { get; set; }
-
-        [JsonProperty("show_in_portal")]
-        public bool ShowInPortal { get; set; }
-
         [JsonProperty("is_active")]
         public bool IsActive { get; set; }
-
-        [JsonProperty("index")]
-        public int Index { get; set; }
 
         [JsonProperty("label")]
         public string Label { get; set; }
 
-        [JsonProperty("show_on_pdf")]
-        public bool ShowOnPdf { get; set; }
-
-        [JsonProperty("edit_on_portal")]
-        public bool EditOnPortal { get; set; }
-
-        [JsonProperty("edit_on_store")]
-        public bool EditOnStore { get; set; }
-
-        [JsonProperty("show_in_all_pdf")]
-        public bool ShowInAllPdf { get; set; }
-
-        [JsonProperty("value_formatted")]
-        public string ValueFormatted { get; set; }
-
-        [JsonProperty("search_entity")]
-        public string SearchEntity { get; set; }
-
         [JsonProperty("data_type")]
         public string DataType { get; set; }
 
-        [JsonProperty("placeholder")]
-        public string PlaceHolder { get; set; }
-
         [JsonProperty("value")]
         public string Value { get; set; }
-
-        [JsonProperty("is_dependent_field")]
-        public bool IsDependentField { get; set; }
     }
 
     public class ContactPersonsDetail
@@ -108,12 +75,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("custom_fields")]
         public List<object> CustomFields { get; set; }
 
-        [JsonProperty("recurring_invoice_id")]
-        public string RecurringInvoiceId { get; set; }
-
-        [JsonProperty("payment_made")]
-        public double PaymentMade { get; set; }
-
         [JsonProperty("reference_number")]
         public string ReferenceNumber { get; set; }
 
@@ -122,27 +83,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
 
         [JsonProperty("total")]
         public double Total { get; set; }
-
-        [JsonProperty("balance")]
-        public double Balance { get; set; }
-
-        [JsonProperty("write_off_amount")]
-        public double WriteOffAmount { get; set; }
-
-        [JsonProperty("roundoff_value")]
-        public double RoundOffValue { get; set; }
-
-        [JsonProperty("tax_id")]
-        public string TaxId { get; set; }
-
-        [JsonProperty("tax_name")]
-        public string TaxName { get; set; }
-
-        [JsonProperty("tax_percentage")]
-        public double TaxPercentage { get; set; }
-
-        [JsonProperty("taxes")]
-        public List<Tax> Taxes { get; set; }
 
         [JsonProperty("contact_persons")]
         public List<object> ContactPersons { get; set; }
@@ -165,32 +105,6 @@ namespace FPVenturesZohoInventorySalesOrder.Models
         [JsonProperty("is_emailed")]
         public bool IsEmailed { get; set; }
 
-        [JsonProperty("submitter_id")]
-        public string SubmitterId { get; set; }
-
-        [JsonProperty("approver_id")]
-        public string ApproverId { get; set; }
-
-        [JsonProperty("submitted_date")]
-        public string SubmittedDate { get; set; }
-
-        [JsonProperty("submitted_by")]
-        public string SubmittedBy { get; set; }
-
-        [JsonProperty("created_time")]
-        public DateTime CreatedTime { get; set; }
-
-        [JsonProperty("last_modified_time")]
-        public DateTime LastModifiedTime { get; set; }
-
-        [JsonProperty("created_date")]
-        public string CreatedDate { get; set; }
-
-        [JsonProperty("created_by_id")]
-        public string CreatedById { get; set; }
-
-        [JsonProperty("last_modified_by_id")]
-        public string LastModifiedById { get; set; }
     }
 
     public class ZohoInventoryInvoiceResponseModel : InventoryResponse

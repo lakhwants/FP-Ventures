@@ -17,15 +17,6 @@ namespace FPVenturesZohoInventoryBill.Models
         [JsonProperty("company_name")]
         public string CompanyName { get; set; }
 
-        [JsonProperty("website")]
-        public string Website { get; set; }
-
-        [JsonProperty("source")]
-        public string Source { get; set; }
-
-        [JsonProperty("is_linked_with_zohocrm")]
-        public bool IsLinkedWithZohocrm { get; set; }
-
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
 

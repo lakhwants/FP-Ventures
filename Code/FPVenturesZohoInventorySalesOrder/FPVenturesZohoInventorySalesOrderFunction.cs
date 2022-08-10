@@ -1,3 +1,4 @@
+using FPVenturesZohoInventorySalesOrder.Helpers;
 using FPVenturesZohoInventorySalesOrder.Models;
 using FPVenturesZohoInventorySalesOrder.Services.Interfaces;
 using FPVenturesZohoInventorySalesOrder.Services.Mapper;
@@ -24,7 +25,7 @@ namespace FPVenturesZohoInventorySalesOrder
         [Function(AzureFunctionName)]
         public async Task RunAsync([TimerTrigger("%SalesOrderSchedule%")] TimerInfo timerInfo, FunctionContext context)
         {
-            string datetime = ModelMapper.GetDateString(DateTime.Now.Date.AddHours(-1));
+            string datetime = DateTime.Now.Date.AddHours(-1).ToZohoDateString();
 
             DateTime lastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 

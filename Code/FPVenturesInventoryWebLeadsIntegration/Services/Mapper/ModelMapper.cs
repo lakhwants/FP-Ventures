@@ -25,22 +25,5 @@ namespace FPVenturesInventoryWebLeadsIntegration.Services.Mapper
             return hawxZohoLeadsModel;
         }
 
-        public static string GetDateString(DateTime date)
-        {
-            return date.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK");
-        }
-
-        public static string RemoveCountryCode(string phone)
-        {
-            if (string.IsNullOrEmpty(phone))
-                return null;
-
-            foreach (var country in CountryCodes.PhoneCountryCodes)
-            {
-                phone = phone.Replace(country, "");
-            }
-            return phone;
-        }
-
     }
 }

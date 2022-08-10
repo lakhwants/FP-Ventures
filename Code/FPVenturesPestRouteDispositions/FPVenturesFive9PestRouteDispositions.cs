@@ -40,7 +40,7 @@ namespace FPVenturesFive9PestRouteDispositions
 			logger.LogInformation($"{AzureFunctionName} Function started on {DateTime.Now}");
 
 			DateTime endDate = DateTime.Now;
-			DateTime startDate = endDate.AddHours(-3);
+			DateTime startDate = endDate.AddHours(-103);
 
 
 			var five9Records = _five9Service.CallWebService(startDate, endDate);

@@ -5,10 +5,17 @@ namespace FPVenturesZohoInventoryBill.Models
 {
     public class LineItem
     {
-        public string name { get; set; }
-        public string account_id { get; set; }
-        public double rate { get; set; }
-        public int quantity { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("account_id")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("rate")]
+        public double Rate { get; set; }
+
+        [JsonProperty("quantity")]
+        public int Quantity { get; set; }
     }
 
     public class CustomField
@@ -22,11 +29,20 @@ namespace FPVenturesZohoInventoryBill.Models
 
     public class ZohoInventoryBillsModel
     {
-        public string vendor_id { get; set; }
-        public string bill_number { get; set; }
-        public string date { get; set; }
-        public string due_date { get; set; }
-        public List<LineItem> line_items { get; set; }
+        [JsonProperty("vendor_id")]
+        public string VendorId { get; set; }
+
+        [JsonProperty("bill_number")]
+        public string BillNumber { get; set; }
+
+        [JsonProperty("date")]
+        public string Date { get; set; }
+
+        [JsonProperty("due_date")]
+        public string DueDate { get; set; }
+
+        [JsonProperty("line_items")]
+        public List<LineItem> LineItems { get; set; }
 
         [JsonProperty("custom_fields")]
         public List<CustomField> CustomFields { get; set; }
